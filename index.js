@@ -1,7 +1,10 @@
-// Drawing cards with a value between 2 - 11
-let firstCard = Math.floor(Math.random() * (12 - 2) + 2); 
+// Draw cards with a value between 2 - 11
+let firstCard = Math.floor(Math.random() * (12 - 2) + 2);
 let secondCard = Math.floor(Math.random() * (12 - 2) + 2);
 let sum = firstCard + secondCard; 
+
+// Cards Array
+let cards = [firstCard, secondCard]; 
 
 // Initializing variables
 let hasBlackjack = false; 
@@ -17,8 +20,12 @@ let sumEl = document.querySelector("#sum-el");
 let cardsEl = document.querySelector("#cards-el"); 
 
 function startGame() {
+    renderGame();
+}
+
+function renderGame() {
     sumEl.textContent = `Sum: ${sum}`; 
-    cardsEl.textContent = `Cards: You drew a ${firstCard} and a ${secondCard}.`
+    cardsEl.textContent = `Cards: You drew a ${cards[0]} and a ${cards[1]}.`
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
     } else if (sum === 21) {
@@ -37,7 +44,7 @@ document.querySelector("#new-btn").addEventListener("click", newCard);
 function newCard() {
     let anotherCard = Math.floor(Math.random() * (12 - 2) + 2);
     sum += anotherCard;  
-    startGame(); 
+    renderGame(); 
 
     console.log(anotherCard);
     console.log(sum);
