@@ -1,9 +1,9 @@
-// Drawing cards
+// Drawing cards with a value between 2 - 11
 let firstCard = Math.floor(Math.random() * (12 - 2) + 2); 
 let secondCard = Math.floor(Math.random() * (12 - 2) + 2);
 let sum = firstCard + secondCard; 
 
-// Initializing values
+// Initializing variables
 let hasBlackjack = false; 
 let isAlive = true; 
 let message = ""; 
@@ -29,16 +29,16 @@ function startGame() {
         isAlive = false;
     }
     messageEl.textContent = `${message}`; 
-
-    console.log(message);
-    console.log(sum);
-    console.log(hasBlackjack);
-    console.log(isAlive);
 }
 
 // Clicking "New Card" calls on newCard()
 document.querySelector("#new-btn").addEventListener("click", newCard); 
 
 function newCard() {
-    console.log("Drawing a new card from the deck!");
+    let anotherCard = Math.floor(Math.random() * (12 - 2) + 2);
+    sum += anotherCard;  
+    startGame(); 
+
+    console.log(anotherCard);
+    console.log(sum);
 }
