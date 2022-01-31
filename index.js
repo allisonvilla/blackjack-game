@@ -7,11 +7,13 @@ let message = "";
 
 document.getElementById("start-btn").addEventListener("click", startGame); 
 
-let messageEl = document.getElementById("message-el"); 
-let sumEl = document.getElementById("sum-el"); 
+let messageEl = document.querySelector("#message-el"); 
+let sumEl = document.querySelector("#sum-el"); 
+let cardsEl = document.querySelector("#cards-el"); 
 
 function startGame() {
     sumEl.textContent = `Sum: ${sum}`; 
+    cardsEl.textContent = `Cards: You drew a ${firstCard} and a ${secondCard}.`
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
     } else if (sum === 21) {
