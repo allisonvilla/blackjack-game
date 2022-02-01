@@ -1,21 +1,19 @@
 // Initializing variables
 let hasBlackjack = false; 
-let isAlive = true; 
+let isPlaying = false; 
 let message = ""; 
+let firstCard = 0;
+let secondCard = 0;
+let sum = 0; 
 
-// Draw cards and show sum
-let firstCard = getRandomCard();
-let secondCard = getRandomCard();
-let sum = firstCard + secondCard;
+// Cards array
+let cards = []; 
 
-// The following function generates a random value between 2 - 11
-// This type of function declaration means it can be used anywhere in the code
+// The following function generates a random whole number between 2 - 11
 function getRandomCard() {
     return Math.floor(Math.random() * (12 - 2) + 2);
 }
-
-// Cards Array
-let cards = [firstCard, secondCard]; 
+// This type of function declaration means it can be used anywhere in the code
 
 // Clicking "Start Game" calls on startGame()
 document.getElementById("start-btn").addEventListener("click", startGame); 
@@ -26,6 +24,11 @@ let sumEl = document.querySelector("#sum-el");
 let cardsEl = document.querySelector("#cards-el"); 
 
 function startGame() {
+    isPlaying = true; 
+    firstCard = getRandomCard();
+    secondCard = getRandomCard(); 
+    sum = firstCard + secondCard; 
+    cards.push(firstCard, secondCard); // Adds the cards to the cards array 
     renderGame();
 }
 
@@ -44,7 +47,7 @@ function renderGame() {
         hasBlackjack = true;
     } else {
         message = "You're out of the game!";
-        isAlive = false;
+        isPlaying = false;
     }
     messageEl.textContent = `${message}`; 
 }
@@ -53,8 +56,15 @@ function renderGame() {
 document.querySelector("#new-btn").addEventListener("click", newCard); 
 
 function newCard() {
-    let anotherCard = getRandomCard();
-    sum += anotherCard; 
-    cards.push(anotherCard); 
-    renderGame(); 
+    if (isPlaying == true && hasBlackjack == false) {
+        let anotherCard = getRandomCard();
+        sum += anotherCard;
+        cards.push(anotherCard);
+        renderGame(); 
+    } else if (isPlaying == true && hasBlackjack == true) {
+        message = "You've already won! Time to cash out."; 
+    } else {
+        message = "Time to start over."; 
+    }
+    messageEl.textContent = `${message}`;
 }
