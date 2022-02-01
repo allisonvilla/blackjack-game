@@ -121,6 +121,9 @@ document.querySelector("#reset-btn").addEventListener("click", resetGame);
 
 // Reloads the page to reset the game
 // Eventually want this to clear current cards and draw new ones so player can keep going until money runs out/they cash out
+// Currently, if you've lost, you can keep adding new cards and continue to lose money til you're broke
 function resetGame() {
     document.location.reload(); 
 }
+
+// Want to add cash out function which ends the game
