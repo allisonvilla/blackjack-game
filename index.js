@@ -1,3 +1,9 @@
+// Player object
+const player = {
+    name: "Geralt of Rivia",
+    chips: 145
+}
+
 // Initializing variables
 let hasBlackjack = false; 
 let isPlaying = false; 
@@ -7,7 +13,16 @@ let secondCard = 0;
 let sum = 0; 
 
 // Cards array
-let cards = []; 
+const cards = []; 
+
+// Storing html elements in variables
+const messageEl = document.querySelector("#message-el");
+const sumEl = document.querySelector("#sum-el");
+const cardsEl = document.querySelector("#cards-el"); 
+const playerEl = document.querySelector("#player-el"); 
+
+// Displays player information
+// playerEl.textContent = `${player.name}: $${player.chips}`; 
 
 // The following function generates a random whole number between 2 - 11
 function getRandomCard() {
@@ -17,11 +32,6 @@ function getRandomCard() {
 
 // Clicking "Start Game" calls on startGame()
 document.getElementById("start-btn").addEventListener("click", startGame); 
-
-// Storing html elements in variables
-let messageEl = document.querySelector("#message-el"); 
-let sumEl = document.querySelector("#sum-el"); 
-let cardsEl = document.querySelector("#cards-el"); 
 
 function startGame() {
     isPlaying = true; 
@@ -67,4 +77,10 @@ function newCard() {
         message = "Time to start over."; 
     }
     messageEl.textContent = `${message}`;
+}
+
+document.querySelector("#reset-btn").addEventListener("click", resetGame); 
+
+function resetGame() {
+    window.location.reload(); 
 }
