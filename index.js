@@ -1,12 +1,12 @@
 // Player object
 const player = {
-    name: "Geralt of Rivia",
-    chips: 145
+    bet: prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters.)"),
+    chips: 1000
 }
 
 // Initializing variables
 let hasBlackjack = false; 
-let isPlaying = false; 
+let isAlive = false; 
 let gameStarted = false; 
 let message = ""; 
 let firstCard = 0;
@@ -22,8 +22,8 @@ const sumEl = document.querySelector("#sum-el");
 const cardsEl = document.querySelector("#cards-el"); 
 const playerEl = document.querySelector("#player-el"); 
 
-// Displays player information
-// playerEl.textContent = `${player.name}: $${player.chips}`; 
+// Displays player funds information
+playerEl.textContent = `Current Funds: $${player.chips} - Current Bet: $${player.bet}`; 
 
 // The following function generates a random whole number between 2 - 11
 function getRandomCard() {
@@ -39,7 +39,7 @@ function startGame() {
         message = "The game has already started, you silly goose."
         messageEl.textContent = `${message}`; 
     } else {
-        isPlaying = true; 
+        isAlive = true; 
         gameStarted = true; 
         firstCard = getRandomCard();
         secondCard = getRandomCard(); 
@@ -63,33 +63,52 @@ function renderGame() {
         message = "You've got blackjack!";
         hasBlackjack = true;
     } else {
-        message = "You're out of the game!";
-        isPlaying = false;
+        message = "You lose!";
+        isAlive = false;
     }
+    chipsManager(); 
     messageEl.textContent = `${message}`; 
+}
+
+// Changes the chips value based on game conditions
+function chipsManager() {
+    if (hasBlackjack == true && isAlive == true) {
+        player.chips = player.chips + player.bet; 
+    } else if (hasBlackjack == false && isAlive == false) {
+        player.chips = player.chips - player.bet; 
+    }
+    playerEl.textContent = `Current Funds: $${player.chips} - Current Bet: $${player.bet}`;  
+    console.log(player.chips); 
+}
+
+if (player.chips >= 1) {
+    isAlive == true; 
+} else if (player.chips <= 0) {
+    isAlive == false; 
 }
 
 // Clicking "New Card" calls on newCard()
 document.querySelector("#new-btn").addEventListener("click", newCard); 
 
 function newCard() {
-    if (isPlaying == true && hasBlackjack == false) {
+    if (isAlive == true && hasBlackjack == false) {
         let anotherCard = getRandomCard();
         sum += anotherCard;
         cards.push(anotherCard);
         renderGame(); 
-    } else if (isPlaying == true && hasBlackjack == true) {
+    } else if (isAlive == true && hasBlackjack == true) {
         message = "You've won! Time to cash out."; 
     } else if (gameStarted === false) {
         message = `Click "Start Game" to begin.`; 
     } else {
-        message = "Time to start over."; 
+        message = "You're done, kiddo."; 
     }
     messageEl.textContent = `${message}`;
 }
 
 document.querySelector("#reset-btn").addEventListener("click", resetGame); 
 
+// Reloads the page to reset the game
 function resetGame() {
-    window.location.reload(); 
+    document.location.reload(); 
 }
