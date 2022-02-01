@@ -1,3 +1,5 @@
+console.log("This is the rounds feature branch."); 
+
 // Player object
 const player = {
     bet: prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters.)"),
@@ -8,6 +10,7 @@ const player = {
 let hasBlackjack = false; 
 let isAlive = false; 
 let gameStarted = false; 
+let roundLost = false; 
 let message = ""; 
 let firstCard = 0;
 let secondCard = 0;
@@ -23,7 +26,7 @@ const cardsEl = document.querySelector("#cards-el");
 const playerEl = document.querySelector("#player-el"); 
 
 // Displays player funds information
-playerEl.textContent = `Current Funds: $${player.chips} - Current Bet: $${player.bet}`; 
+playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`; 
 
 // The following function generates a random whole number between 2 - 11
 function getRandomCard() {
@@ -64,9 +67,10 @@ function renderGame() {
         hasBlackjack = true;
     } else {
         message = "You lose!";
-        isAlive = false;
+        roundLost = true;
     }
     chipsManager(); 
+    areYouBroke();
     messageEl.textContent = `${message}`; 
 }
 
@@ -74,17 +78,22 @@ function renderGame() {
 function chipsManager() {
     if (hasBlackjack == true && isAlive == true) {
         player.chips = player.chips + player.bet; 
-    } else if (hasBlackjack == false && isAlive == false) {
+    } else if (hasBlackjack == false && isAlive == true && roundLost == true) {
         player.chips = player.chips - player.bet; 
     }
-    playerEl.textContent = `Current Funds: $${player.chips} - Current Bet: $${player.bet}`;  
+    playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`;  
     console.log(player.chips); 
 }
 
-if (player.chips >= 1) {
-    isAlive == true; 
-} else if (player.chips <= 0) {
-    isAlive == false; 
+// If the player runs out of chips, they perma-lose
+function areYouBroke() {
+    if (player.chips >= 1) {
+        isAlive = true;
+    } else if (player.chips <= 0) {
+        isAlive = false;
+        message = "Get out of my casino."
+        messageEl.textContent = `${message}`;
+    }
 }
 
 // Clicking "New Card" calls on newCard()
@@ -100,15 +109,17 @@ function newCard() {
         message = "You've won! Time to cash out."; 
     } else if (gameStarted === false) {
         message = `Click "Start Game" to begin.`; 
-    } else {
+    } else if (isAlive == false) {
         message = "You're done, kiddo."; 
     }
     messageEl.textContent = `${message}`;
+    console.log(isAlive);
 }
 
 document.querySelector("#reset-btn").addEventListener("click", resetGame); 
 
 // Reloads the page to reset the game
+// Eventually want this to clear current cards and draw new ones so player can keep going until money runs out/they cash out
 function resetGame() {
     document.location.reload(); 
 }
