@@ -75,8 +75,6 @@ function renderGame() {
     messageEl.textContent = `${message}`; 
 }
 
-// add a lostRound variable to track if chips have been lost but player is still in the game
-
 // Changes the chips value based on game conditions
 function chipsManager() {
     if (hasBlackjack == true && isAlive == true) {
