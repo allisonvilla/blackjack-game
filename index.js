@@ -7,6 +7,7 @@ const player = {
 // Initializing variables
 let hasBlackjack = false; 
 let isPlaying = false; 
+let gameStarted = false; 
 let message = ""; 
 let firstCard = 0;
 let secondCard = 0;
@@ -34,12 +35,18 @@ function getRandomCard() {
 document.getElementById("start-btn").addEventListener("click", startGame); 
 
 function startGame() {
-    isPlaying = true; 
-    firstCard = getRandomCard();
-    secondCard = getRandomCard(); 
-    sum = firstCard + secondCard; 
-    cards.push(firstCard, secondCard); // Adds the cards to the cards array 
-    renderGame();
+    if (gameStarted == true) {
+        message = "The game has already started, you silly goose."
+        messageEl.textContent = `${message}`; 
+    } else {
+        isPlaying = true; 
+        gameStarted = true; 
+        firstCard = getRandomCard();
+        secondCard = getRandomCard(); 
+        sum = firstCard + secondCard; 
+        cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+        renderGame();
+    }
 }
 
 // The following function shows the player their cards and their status
@@ -72,7 +79,9 @@ function newCard() {
         cards.push(anotherCard);
         renderGame(); 
     } else if (isPlaying == true && hasBlackjack == true) {
-        message = "You've already won! Time to cash out."; 
+        message = "You've won! Time to cash out."; 
+    } else if (gameStarted === false) {
+        message = `Click "Start Game" to begin.`; 
     } else {
         message = "Time to start over."; 
     }
