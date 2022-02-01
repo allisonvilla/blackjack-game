@@ -1,15 +1,21 @@
-// Draw cards with a value between 2 - 11
-let firstCard = Math.floor(Math.random() * (12 - 2) + 2);
-let secondCard = Math.floor(Math.random() * (12 - 2) + 2);
-let sum = firstCard + secondCard; 
-
-// Cards Array
-let cards = [firstCard, secondCard]; 
-
 // Initializing variables
 let hasBlackjack = false; 
 let isAlive = true; 
 let message = ""; 
+
+// Draw cards and show sum
+let firstCard = getRandomCard();
+let secondCard = getRandomCard();
+let sum = firstCard + secondCard;
+
+// The following function generates a random value between 2 - 11
+// This type of function declaration means it can be used anywhere in the code
+function getRandomCard() {
+    return Math.floor(Math.random() * (12 - 2) + 2);
+}
+
+// Cards Array
+let cards = [firstCard, secondCard]; 
 
 // Clicking "Start Game" calls on startGame()
 document.getElementById("start-btn").addEventListener("click", startGame); 
@@ -23,6 +29,7 @@ function startGame() {
     renderGame();
 }
 
+// The following function shows the player their cards and their status
 function renderGame() {
     // cardsEl element will display the cards in the cards array
     cardsEl.textContent = " "
@@ -46,12 +53,8 @@ function renderGame() {
 document.querySelector("#new-btn").addEventListener("click", newCard); 
 
 function newCard() {
-    let anotherCard = Math.floor(Math.random() * (12 - 2) + 2);
+    let anotherCard = getRandomCard();
     sum += anotherCard; 
     cards.push(anotherCard); 
-
     renderGame(); 
-
-    console.log(anotherCard);
-    console.log(cards);
 }
