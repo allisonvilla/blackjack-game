@@ -2,7 +2,7 @@ console.log("This is the rounds feature branch.");
 
 // Player object
 const player = {
-    bet: prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters.)"),
+    bet: 0,
     chips: 1000
 }
 
@@ -48,6 +48,7 @@ function startGame() {
         secondCard = getRandomCard(); 
         sum = firstCard + secondCard; 
         cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+        player.bet = prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters.)"); 
         renderGame();
     }
 }
@@ -73,6 +74,8 @@ function renderGame() {
     areYouBroke();
     messageEl.textContent = `${message}`; 
 }
+
+// add a lostRound variable to track if chips have been lost but player is still in the game
 
 // Changes the chips value based on game conditions
 function chipsManager() {
