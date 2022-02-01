@@ -1,6 +1,6 @@
 // Player object
 const player = {
-    bet: prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters.)"),
+    bet: 0,
     chips: 1000
 }
 
@@ -45,6 +45,7 @@ function startGame() {
         secondCard = getRandomCard(); 
         sum = firstCard + secondCard; 
         cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+        player.bet = prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters.)"); 
         renderGame();
     }
 }
@@ -70,6 +71,8 @@ function renderGame() {
     messageEl.textContent = `${message}`; 
 }
 
+// add a lostRound variable to track if chips have been lost but player is still in the game
+
 // Changes the chips value based on game conditions
 function chipsManager() {
     if (hasBlackjack == true && isAlive == true) {
@@ -80,6 +83,8 @@ function chipsManager() {
     playerEl.textContent = `Current Funds: $${player.chips} - Current Bet: $${player.bet}`;  
     console.log(player.chips); 
 }
+
+// if you win, winnings get concatenated to current funds rather than added - why???
 
 if (player.chips >= 1) {
     isAlive == true; 
