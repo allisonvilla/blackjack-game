@@ -24,8 +24,12 @@ function startGame() {
 }
 
 function renderGame() {
-    sumEl.textContent = `Sum: ${sum}`; 
-    cardsEl.textContent = `Cards: You drew a ${cards[0]} and a ${cards[1]}.`
+    // cardsEl element will display the cards in the cards array
+    cardsEl.textContent = " "
+    for (let n = 0; n < cards.length; n++) {
+        cardsEl.textContent += cards[n] + " "; 
+    }
+    sumEl.textContent = `${sum}`; 
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
     } else if (sum === 21) {
@@ -43,9 +47,11 @@ document.querySelector("#new-btn").addEventListener("click", newCard);
 
 function newCard() {
     let anotherCard = Math.floor(Math.random() * (12 - 2) + 2);
-    sum += anotherCard;  
+    sum += anotherCard; 
+    cards.push(anotherCard); 
+
     renderGame(); 
 
     console.log(anotherCard);
-    console.log(sum);
+    console.log(cards);
 }
