@@ -1,17 +1,22 @@
 // TO-DO LIST
 
 // Fixes:
-// Remove ability to keep drawing new cards after losing a round
-// Remove ability to click start game after running out of money
+// (Bug) Winning blackjack concatenates your bet to your funds instead of adding
+// Optimize code
 
 // New Features:
 // Add end round function which ends the round and lets player keep winnings (end round) / half winnings (if not blackjack)
-// Add the option to change your bet
+// Hide "Start Game" button after starting a game
+// Add and show "Reset" button after losing all your money
+// Proper input for player bet that checks for type and funds
 // Quick instructions for the player
 
-// ✔ Done:
+// ✔ DONE
 // Add new round function and button
+// Add the option to change your bet
 // Remove ability to start a new round while a current one is ongoing
+// Remove ability to keep drawing new cards after losing a round
+// Remove ability to click start game after running out of money
 
 console.log("This is the rounds feature branch."); 
 
@@ -55,7 +60,7 @@ document.getElementById("start-btn").addEventListener("click", startGame);
 
 function startGame() {
     if (gameStarted == true) {
-        message = "The game has already started, you silly goose."
+        message = "You've already started a game, you silly goose."
         messageEl.textContent = `${message}`; 
     } else {
         hasMoney = true; 
@@ -109,7 +114,6 @@ function areYouBroke() {
         hasMoney = true;
     } else if (player.chips <= 0) {
         hasMoney = false;
-        gameStarted = false; 
         roundInProgress = false; 
         message = "You're out of money. Thanks for playing!"
         messageEl.textContent = `${message}`;
@@ -120,7 +124,7 @@ function areYouBroke() {
 document.querySelector("#new-btn").addEventListener("click", newCard); 
 
 function newCard() {
-    if (hasMoney == true && hasBlackjack == false) {
+    if (hasMoney == true && hasBlackjack == false && roundLost == false) {
         let anotherCard = getRandomCard();
         sum += anotherCard;
         cards.push(anotherCard);
@@ -131,9 +135,10 @@ function newCard() {
         message = `Click "Start Game" to begin.`; 
     } else if (hasMoney == false) {
         message = "You're done, kiddo."; 
+    } else if (roundLost == true && hasMoney == true) {
+        message = "You've lost this round. Care to start a new one?"; 
     }
     messageEl.textContent = `${message}`;
-    console.log(hasMoney);
 }
 
 document.querySelector("#reset-btn").addEventListener("click", newRound); 
