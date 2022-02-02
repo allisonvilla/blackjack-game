@@ -2,10 +2,10 @@
 
 // Fixes:
 // (Bug) Winning blackjack concatenates your bet to your funds instead of adding
+// Fix bets so that player funds are actually deducted
 // Optimize code
 
 // New Features:
-// Add end round function which ends the round and lets player keep winnings (end round) / half winnings (if not blackjack)
 // Hide "Start Game" button after starting a game
 // Add and show "Reset" button after losing all your money
 // Proper input for player bet that checks for type and funds
@@ -17,6 +17,7 @@
 // Remove ability to start a new round while a current one is ongoing
 // Remove ability to keep drawing new cards after losing a round
 // Remove ability to click start game after running out of money
+// Add end round function which ends the round and lets player keep winnings (if blackjack) / half winnings (if not blackjack)
 
 console.log("This is the rounds feature branch."); 
 
@@ -60,7 +61,7 @@ document.getElementById("start-btn").addEventListener("click", startGame);
 
 function startGame() {
     if (gameStarted == true) {
-        message = "You've already started a game, you silly goose."
+        message = "You've already started a game, you silly goose.";
         messageEl.textContent = `${message}`; 
     } else {
         hasMoney = true; 
@@ -77,7 +78,7 @@ function startGame() {
 
 // The following function shows the player their cards and their status
 function renderGame() {
-    // cardsEl element will display the cards in the cards array separated by | 
+    // cardsEl element will display the cards in the cards array - this used to be a for loop
     cardsEl.textContent = cards.join(" | ");
     sumEl.textContent = `${sum}`; 
     if (sum <= 20) {
@@ -104,6 +105,9 @@ function chipsManager() {
         player.chips = player.chips + player.bet; 
     } else if (hasBlackjack == false && hasMoney == true && roundLost == true) {
         player.chips = player.chips - player.bet; 
+    } else if (hasBlackjack == false && hasMoney == true && roundLost == false && roundInProgress == false) {
+        // Half winnings for early enders
+        player.chips = player.chips + player.bet / 2; 
     }
     playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`; 
 }
@@ -115,13 +119,13 @@ function areYouBroke() {
     } else if (player.chips <= 0) {
         hasMoney = false;
         roundInProgress = false; 
-        message = "You're out of money. Thanks for playing!"
+        message = "You're out of money. Thanks for playing!";
         messageEl.textContent = `${message}`;
     }
 }
 
 // Clicking "New Card" calls on newCard()
-document.querySelector("#new-btn").addEventListener("click", newCard); 
+document.querySelector("#newCard-btn").addEventListener("click", newCard); 
 
 function newCard() {
     if (hasMoney == true && hasBlackjack == false && roundLost == false) {
@@ -141,10 +145,11 @@ function newCard() {
     messageEl.textContent = `${message}`;
 }
 
-document.querySelector("#reset-btn").addEventListener("click", newRound); 
+document.querySelector("#newRound-btn").addEventListener("click", newRound); 
 
 function newRound() {
     if (hasMoney == true && gameStarted == true && roundInProgress == false) {
+        // Reset the roundLost variable
         roundLost = false; 
         // Clear the cards array
         cards.splice(0); 
@@ -156,11 +161,31 @@ function newRound() {
         player.bet = prompt("What is your new bet? (Please enter a number with no other symbols or characters. 🙏)");
         renderGame();
     } else if (hasMoney == false && gameStarted == true) {
-        message = "Get out of my casino."
+        message = "Get out of my casino."; 
     } else if (gameStarted == false) {
         message = `Click "Start Game" to begin.`;
     } else if (roundInProgress == true) {
-        message = `Round is still in progress! Select "End Round" to keep half your bet.`
+        message = `Round is still in progress! Select "End Round" to keep half your bet.`;
+    }
+    messageEl.textContent = `${message}`;
+}
+
+document.querySelector("#endRound-btn").addEventListener("click", endRound); 
+
+function endRound() {
+    if (roundInProgress == false || roundLost == true) {
+        message = "Round has already ended!"; 
+    }
+    else if (hasMoney == true && gameStarted == true) {
+        roundInProgress = false
+        roundLost = false;
+        cards.splice(0); 
+        chipsManager(); 
+        message = "If you've still got some money, you can start a new round!";
+    } else if (hasMoney == false && gameStarted == true) {
+        message = "Get out of my casino.";
+    } else if (gameStarted == false) {
+        message = `Click "Start Game" to begin.`;
     }
     messageEl.textContent = `${message}`;
 }
