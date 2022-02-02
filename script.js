@@ -1,9 +1,8 @@
 // TO-DO LIST
 
 // Fixes:
-// (Bug) Winning blackjack concatenates your bet to your funds instead of adding
-// Fix bets so that player funds are actually deducted
-// Optimize code
+// (Bug) If you win blackjack, your bet doesn't get deducted and your winnings are not added
+// Optimize this spaghetti code
 
 // New Features:
 // Hide "Start Game" button after starting a game
@@ -18,14 +17,15 @@
 // Remove ability to keep drawing new cards after losing a round
 // Remove ability to click start game after running out of money
 // Add end round function which ends the round and lets player keep winnings (if blackjack) / half winnings (if not blackjack)
-
-console.log("This is the rounds feature branch."); 
+// Fix betting system so that player funds are actually deducted
+// (Bug) Winning blackjack concatenates your bet to your funds instead of adding
 
 // Player object
 const player = {
     bet: 0,
     chips: 1000
 }
+// Player is currently prompted to make a bet in startGame() and newRound() 
 
 // Initializing variables
 let hasBlackjack = false; 
@@ -54,7 +54,6 @@ playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player
 function getRandomCard() {
     return Math.floor(Math.random() * (12 - 2) + 2);
 }
-// This type of function declaration means it can be used anywhere in the code
 
 // Clicking "Start Game" calls on startGame()
 document.getElementById("start-btn").addEventListener("click", startGame); 
@@ -68,15 +67,19 @@ function startGame() {
         gameStarted = true; 
         roundInProgress = true; 
         firstCard = getRandomCard();
-        secondCard = getRandomCard(); 
+        secondCard = getRandomCard();
         sum = firstCard + secondCard; 
         cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+        // Make bet and deduct from current funds
         player.bet = prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters. 🙏)"); 
+        // Converts the bet from a string to a number 
+        player.bet = parseInt(player.bet); 
+        player.chips = player.chips - player.bet;
         renderGame();
     }
 }
 
-// The following function shows the player their cards and their status
+
 function renderGame() {
     // cardsEl element will display the cards in the cards array - this used to be a for loop
     cardsEl.textContent = cards.join(" | ");
@@ -84,15 +87,17 @@ function renderGame() {
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
         roundInProgress = true; 
+        hasBlackjack = false; 
     } else if (sum === 21) {
         message = "You've got blackjack!";
-        hasBlackjack = true;
         roundLost = false; 
         roundInProgress = false; 
+        hasBlackjack = true;
     } else {
         message = "You lose!";
         roundLost = true; 
         roundInProgress = false; 
+        hasBlackjack = false; 
     }
     chipsManager(); 
     areYouBroke();
@@ -102,7 +107,7 @@ function renderGame() {
 // Changes the chips value based on game conditions
 function chipsManager() {
     if (hasBlackjack == true && hasMoney == true && roundLost == false) {
-        player.chips = player.chips + player.bet; 
+        player.chips = player.chips + player.bet;
     } else if (hasBlackjack == false && hasMoney == true && roundLost == true) {
         player.chips = player.chips - player.bet; 
     } else if (hasBlackjack == false && hasMoney == true && roundLost == false && roundInProgress == false) {
@@ -154,11 +159,15 @@ function newRound() {
         // Clear the cards array
         cards.splice(0); 
         // Draw new cards and make new bet
-        firstCard = getRandomCard();
-        secondCard = getRandomCard();
+        firstCard = 10;
+        secondCard = 11;
+        // getRandomCard(); 
         sum = firstCard + secondCard;
         cards.push(firstCard, secondCard);
+        // Make new bet and deduct from current funds
         player.bet = prompt("What is your new bet? (Please enter a number with no other symbols or characters. 🙏)");
+        player.bet = parseInt(player.bet);
+        player.chips = player.chips - player.bet;
         renderGame();
     } else if (hasMoney == false && gameStarted == true) {
         message = "Get out of my casino."; 
