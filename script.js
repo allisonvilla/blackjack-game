@@ -1,4 +1,14 @@
-console.log("Hi there! 👋");
+// ✔ TO-DO LIST
+
+// Fixes:
+// Remove ability to start a new round while a current one is ongoing
+// Remove ability to keep drawing new cards after losing a round
+// Remove ability to click start game after running out of money
+
+// New Features:
+// Add cash out function which ends the game
+// Add the option to change your bet
+
 console.log("This is the rounds feature branch."); 
 
 // Player object
@@ -118,15 +128,17 @@ function newCard() {
 
 document.querySelector("#reset-btn").addEventListener("click", newRound); 
 
-// Reloads the page to reset the game
-// Eventually want this to clear current cards and draw new ones so player can keep going until money runs out/they cash out
-// Currently, if you've lost, you can keep adding new cards and continue to lose money til you're broke
 function newRound() {
     if (hasMoney == true && gameStarted == true) {
         // Clear the cards array
-        // Draw new cards 
-        // Display new cards
-        // Render game
+        cards.splice(0); 
+        // Draw new cards and make new bet
+        firstCard = getRandomCard();
+        secondCard = getRandomCard();
+        sum = firstCard + secondCard;
+        cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+        player.bet = prompt("What is your new bet? (Please enter a number with no other symbols or characters.)");
+        renderGame();
     } else if (hasMoney == false && gameStarted == true) {
         message = "Get out of my casino."
     } else if (gameStarted == false) {
@@ -134,6 +146,3 @@ function newRound() {
     }
     messageEl.textContent = `${message}`;
 }
-
-// Want to add cash out function which ends the game
-// Want to add the option to change your bet
