@@ -1,3 +1,4 @@
+console.log("Hi there! 👋");
 console.log("This is the rounds feature branch."); 
 
 // Player object
@@ -8,7 +9,7 @@ const player = {
 
 // Initializing variables
 let hasBlackjack = false; 
-let isAlive = false; 
+let hasMoney = false; 
 let gameStarted = false; 
 let roundLost = false; 
 let message = ""; 
@@ -42,7 +43,7 @@ function startGame() {
         message = "The game has already started, you silly goose."
         messageEl.textContent = `${message}`; 
     } else {
-        isAlive = true; 
+        hasMoney = true; 
         gameStarted = true; 
         firstCard = getRandomCard();
         secondCard = getRandomCard(); 
@@ -56,10 +57,7 @@ function startGame() {
 // The following function shows the player their cards and their status
 function renderGame() {
     // cardsEl element will display the cards in the cards array
-    cardsEl.textContent = " "
-    for (let n = 0; n < cards.length; n++) {
-        cardsEl.textContent += cards[n] + " "; 
-    }
+    cardsEl.textContent = cards.join(" | ");
     sumEl.textContent = `${sum}`; 
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
@@ -77,9 +75,9 @@ function renderGame() {
 
 // Changes the chips value based on game conditions
 function chipsManager() {
-    if (hasBlackjack == true && isAlive == true) {
+    if (hasBlackjack == true && hasMoney == true) {
         player.chips = player.chips + player.bet; 
-    } else if (hasBlackjack == false && isAlive == true && roundLost == true) {
+    } else if (hasBlackjack == false && hasMoney == true && roundLost == true) {
         player.chips = player.chips - player.bet; 
     }
     playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`;  
@@ -89,10 +87,11 @@ function chipsManager() {
 // If the player runs out of chips, they perma-lose
 function areYouBroke() {
     if (player.chips >= 1) {
-        isAlive = true;
+        hasMoney = true;
     } else if (player.chips <= 0) {
-        isAlive = false;
-        message = "Get out of my casino."
+        hasMoney = false;
+        gameStarted = false; 
+        message = "You're out of money. Thanks for playing!"
         messageEl.textContent = `${message}`;
     }
 }
@@ -101,29 +100,40 @@ function areYouBroke() {
 document.querySelector("#new-btn").addEventListener("click", newCard); 
 
 function newCard() {
-    if (isAlive == true && hasBlackjack == false) {
+    if (hasMoney == true && hasBlackjack == false) {
         let anotherCard = getRandomCard();
         sum += anotherCard;
         cards.push(anotherCard);
         renderGame(); 
-    } else if (isAlive == true && hasBlackjack == true) {
+    } else if (hasMoney == true && hasBlackjack == true) {
         message = "You've won! Time to cash out."; 
     } else if (gameStarted === false) {
         message = `Click "Start Game" to begin.`; 
-    } else if (isAlive == false) {
+    } else if (hasMoney == false) {
         message = "You're done, kiddo."; 
     }
     messageEl.textContent = `${message}`;
-    console.log(isAlive);
+    console.log(hasMoney);
 }
 
-document.querySelector("#reset-btn").addEventListener("click", resetGame); 
+document.querySelector("#reset-btn").addEventListener("click", newRound); 
 
 // Reloads the page to reset the game
 // Eventually want this to clear current cards and draw new ones so player can keep going until money runs out/they cash out
 // Currently, if you've lost, you can keep adding new cards and continue to lose money til you're broke
-function resetGame() {
-    document.location.reload(); 
+function newRound() {
+    if (hasMoney == true && gameStarted == true) {
+        // Clear the cards array
+        // Draw new cards 
+        // Display new cards
+        // Render game
+    } else if (hasMoney == false && gameStarted == true) {
+        message = "Get out of my casino."
+    } else if (gameStarted == false) {
+        message = `Click "Start Game" to begin.`;
+    }
+    messageEl.textContent = `${message}`;
 }
 
 // Want to add cash out function which ends the game
+// Want to add the option to change your bet
