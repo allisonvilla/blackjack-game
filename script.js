@@ -98,8 +98,8 @@ function startGame() {
         hasMoney = true; 
         gameStarted = true; 
         roundInProgress = true;  
-        firstCard = 11; 
-        secondCard = 10; 
+        firstCard = getRandomCard(); 
+        secondCard = getRandomCard(); 
         sum = firstCard + secondCard; 
         cards.push(firstCard, secondCard); // Adds the cards to the cards array 
         luckyDrawCheck();
