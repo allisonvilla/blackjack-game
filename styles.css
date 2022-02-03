@@ -1,12 +1,165 @@
 /* Setup Styles */
-
 html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}figcaption,figure,main{display:block}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}dfn{font-style:italic}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}audio,video{display:inline-block}audio:not([controls]){display:none;height:0}img{border-style:none}svg:not(:root){overflow:hidden}button,input,optgroup,select,textarea{font-family:sans-serif;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}button,html [type=button],[type=reset],[type=submit]{-webkit-appearance:button}button::-moz-focus-inner,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner{border-style:none;padding:0}button:-moz-focusring,[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{display:inline-block;vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details,menu{display:block}summary{display:list-item}canvas{display:inline-block}template{display:none}[hidden]{display:none}
 
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; border: 0; padding: 0; white-space: nowrap; clip-path: inset(100%); clip: rect(0 0 0 0); overflow: hidden;}
 
-/* App Styles */
+/* Base Styles */
+html {
+    font-size: 125%;
+    background-color: black;
+}
+
+main {
+    background-color: #1d3527;
+}
+
+.wrapper {
+    width: 60%;
+    max-width: 480px; 
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+
 h1 {
     color: #D4AF37; 
+    font-weight: 500; 
+    font-size: 2.3rem;
+}
+
+h2 {
+    font-weight: 400; 
+}
+
+p, li {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem; 
+    font-weight: 300; 
+}
+
+.wrapper > div {
+    margin-top: 10px;
+    margin-bottom: 10px; 
+}
+
+/* Title & Message */
+.title-message {
+    background-color: #f0eee2;
+    border-radius: 15px; 
+    padding: 0px 25px 15px 25px; 
+}
+
+/* Game Info */
+.game-info {
+    background-color: #f0eee2; 
+    border-radius: 15px;
+    padding: 0px 25px; 
+}
+
+.game-info .label {
+    font-weight: 400;
+}
+
+#cards-el, 
+#sum-el {
+    font-weight: 300; 
+}
+
+/* The Buttons */
+button {
+    font-family: 'Lato', sans-serif;
+    border: none; 
+    background-color: #cfaa30;
+    color: #f0eee2;  
+    padding: 10px 25px; 
+    border-radius: 10px; 
+}
+
+.special-buttons {
+    display: flex; 
+    justify-content: center;
+}
+
+.game-buttons {
+    display: flex; 
+    justify-content: space-between; 
+}
+
+/* Player Funds Info */
+.player-info {
+    background-color: #f0eee2; 
+    border-radius: 15px;
+}
+
+.player-info .label {
+    text-align: center; 
+    font-weight: 400; 
+}
+
+#chips-el,
+#bet-el {
+    font-weight: 300; 
+}
+
+/* Instructions */
+
+.help-me {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+#help-click {
+    margin-bottom: 20px;
+}
+
+#help-info {
+    background-color: #f0eee2; 
+    border-radius: 15px; 
+    padding: 0px 25px; 
+}
+
+#help-info li {
+    margin-bottom: 5px; 
+}
+
+/* Footer */
+footer { 
+    background-color: black;
+    color: white; 
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    padding: 10px 0px 10px 0px; 
+}
+
+footer p {
+    margin: 2px auto; 
+    font-size: 0.8rem; 
+}
+
+footer p.small-copy {
+    font-size: 0.7rem; 
+    margin-bottom: 0; 
+}
+
+a {
+    font-weight: 400; 
+    text-decoration: none;
+    color: #ebc95a;
+    padding-bottom: 2px; 
+    border-bottom: 2px solid transparent; 
+    transition: 0.3s; 
+}
+
+a:hover,
+a:focus {
+    border-bottom: 2px solid #ebc95a;
 }

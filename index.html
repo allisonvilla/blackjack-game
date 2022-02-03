@@ -4,33 +4,73 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Playfair+Display:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <title>Sort of a Blackjack Game!</title>
+    <title>Kind of a Blackjack Game!</title>
 </head>
 <body>
-    <h1>Kind Of Blackjack</h1>
-    <h2 id="message-el">Want to play a round?</h2>
+    <main>
+        <div class="wrapper">
+            <!-- Title & Message -->
+            <div class="title-message">
+                <h1>Somewhat Blackjack</h1>
+                <h2 id="message-el">This is sort of Blackjack. Want to play a round?</h2>
+            </div>
 
-    <!-- Game Info -->
-    <p class="label">Your Cards: <span id="cards-el"></span></p>
-    <p class="label">Sum: <span id="sum-el"></span></p>
+            <!-- Game Info -->
+            <div class="game-info">
+                <p class="label">Your Cards: <span id="cards-el"></span></p>
+                <p class="label">Sum: <span id="sum-el"></span></p>
+            </div>
 
-    <!-- Game Buttons -->
-    <button id="start-btn">Start Game</button>
-    <button id="reset-btn">Travel back in time...</button>
-    <button id="newCard-btn">New Card</button>
-    <button id="newRound-btn">New Round</button>
-    <button id="endRound-btn">End Round</button>
+            <!-- Special Buttons -->
+            <div class="special-buttons">
+                <button id="start-btn">Start Game</button>
+                <button id="reset-btn">Travel back in time...</button>
+            </div>
 
-    <!-- Player Funds Info -->
-    <p id="player-el"></p>
+            <!-- Game Buttons -->
+            <div class="game-buttons">
+                <button id="newCard-btn">New Card</button>
+                <button id="newRound-btn">New Round</button>
+                <button id="endRound-btn">End Round</button>
+            </div>
 
-    <!-- JavaScript Link -->
+            <!-- Player Funds Info -->
+            <div class="player-info">
+                <p class="label">Current Funds: <span id="chips-el"></span> | Current Bet: <span id="bet-el"></span></p>
+            </div>
+
+            <!-- Instructions -->
+            <div class="help-me">
+                <button id="help-click">Instructions</button>
+                <div id="help-info">
+                    <h3>Your Objective</h3>
+                    <p>In ✨Almost Blackjack✨ your goal is to draw cards until the total value of the cards in your hand reaches 21.</p>
+                    <p>If you reach 21, you win! If you go over 21, you lose.</p>
+                    <h3>Betting</h3>
+                    <p>At the beginning of a round, you place a bet. At the end of the round, your bet is deducted from your funds then awarded based on your win/lose conditions.
+                    <ul>
+                        <li>Reaching a sum of 21 wins you your full bet amount!</li>
+                        <li>Reaching a sum of over 21 loses you your full bet amount.</li>
+                        <li>Ending a round early (ie. before you reach or exceed a sum of 21) wins you a portion of your bet amount based on how close your current sum is to 21 (the closer you got, the more money you win back!).</li>
+                        <li>Drawing a "natural" (ie. reaching 21 on your first draw) wins you twice your bet amount just for being lucky! 😊</li>
+                    </ul>
+                    </p>
+                </div> <!-- END #help-info -->
+            </div> <!-- END .help-me -->
+        </div> <!-- END .wrapper -->
+    </main>
+
+    <footer>
+        <p>Made with 💕 by Allison Villa</p>
+        <p class="small-copy">I made this simple app as a study tool - you can view its code <a href="https://github.com/allisonvilla/blackjack-game">here</a></p>
+    </footer>
+
     <script src="script.js"></script>
-
-    <!-- <footer>
-        <p>Made with ❤ by Allison Villa</p>
-        <p>I made this simple app as a study tool - you can view its code <a href="https://github.com/allisonvilla/blackjack-game">here</a></p>
-    </footer> -->
 </body>
 </html>

@@ -48,12 +48,16 @@ const cards = [];
 const messageEl = document.querySelector("#message-el");
 const sumEl = document.querySelector("#sum-el");
 const cardsEl = document.querySelector("#cards-el"); 
-const playerEl = document.querySelector("#player-el"); 
+const chipsEl = document.querySelector("#chips-el"); 
+const betEl = document.querySelector("#bet-el"); 
 const startButton = document.querySelector("#start-btn");
 const resetButton = document.querySelector("#reset-btn"); 
+const helpMe = document.querySelector("#help-click"); 
+const helpInfo = document.querySelector("#help-info"); 
 
 // Displays player funds information
-playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`; 
+chipsEl.textContent = `$${player.chips}`; 
+betEl.textContent = `$${player.bet}`; 
 
 // Hides reset button until later
 resetButton.style.display = "none";
@@ -92,7 +96,7 @@ function startGame() {
 // Function that checks for a natural before rendering game
 function luckyDrawCheck() {
     if (sum === 21) {
-        player.chips += player.bet;
+        player.chips = player.chips + player.bet * 2;
         message = "You got blackjack!";
         roundLost = false;
         roundWon = true;
@@ -130,7 +134,7 @@ function renderGame() {
 // Changes the chips value based on win/lose conditions
 function chipsManager() {
     if (roundWon == true && hasMoney == true && roundLost == false && roundInProgress == false) {
-        // Full winnings for blackjack 
+        // Full winnings for getting 21
         player.chips += player.bet; 
     } else if (roundWon == false && roundLost == true && roundInProgress == false) {
         // Deduct bet for losers
@@ -140,7 +144,8 @@ function chipsManager() {
         player.chips = player.chips - player.bet + (player.bet * ( sum / 21 )); 
         player.chips = Math.round(player.chips * 100) / 100;
     }
-    playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`; 
+    chipsEl.textContent = `$${player.chips}`;
+    betEl.textContent = `$${player.bet}`; 
 }
 
 // If the player runs out of chips, they perma-lose
@@ -229,4 +234,17 @@ resetButton.addEventListener("click", resetGame);
 
 function resetGame() {
     window.location.reload(); 
+}
+
+// Show and hide the help info on click
+helpMe.addEventListener("click", giveHelp); 
+
+helpInfo.style.display = "none";
+
+function giveHelp() { 
+    if (helpInfo.style.display === "none") {
+        helpInfo.style.display = "block"; 
+    } else {
+        helpInfo.style.display = "none"; 
+    }
 }
