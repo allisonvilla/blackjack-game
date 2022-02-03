@@ -90,8 +90,8 @@ function giveMeYourMoney() {
 // Clicking "Start Game" calls on startGame()
 startButton.addEventListener("click", startGame); 
 function startGame() {
-    giveMeYourMoney();
     if (player.bet === 0) {
+        giveMeYourMoney();
         message = "Place your bet and hit start again.";
         messageEl.textContent = `${message}`; 
     } else {
