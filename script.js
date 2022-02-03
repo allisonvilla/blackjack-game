@@ -4,24 +4,25 @@
 // Optimize this spaghetti code
 
 // New Features:
-// Quick instructions for the player
-// Make pretty
-// Proper input for player bet that checks for type and funds
+// Don't show cards until bet is placed
 
 // ✔ DONE
 // (Done) Add new round function and button
-// (Done) Add the option to change your bet
+// (Done) Add betting system
 // (Fixed) Remove ability to start a new round while a current one is ongoing
 // (Fixed) Remove ability to keep drawing new cards after losing a round
 // (Fixed) Remove ability to click start game after running out of money
 // (Done) Add end round function which ends the round and lets player keep (some) winnings
-// (Fixed) Fix betting so that player funds are actually deducted
+// (Fixed) Fix betting system so that player funds are actually deducted
 // (Fixed) Winning blackjack concatenates your bet to your funds instead of adding
 // (Fixed) Can draw a new card after ending the round
 // (Fixed) If you win blackjack on your first draw, your bet doesn't get deducted and your winnings are not added
 // (Done) Hide "Start Game" button after starting a game
 // (Done) Add and show "Reset" button after losing all your money
 // (Done) Ending a round early awards you a portion of the bet based on how close you got to 21
+// (Done) Quick instructions for the player
+// (Done) Proper input for player bet that checks for type and funds
+// (Done) Make pretty 
 
 // Player object
 const player = {
@@ -54,6 +55,8 @@ const startButton = document.querySelector("#start-btn");
 const resetButton = document.querySelector("#reset-btn"); 
 const helpMe = document.querySelector("#help-click"); 
 const helpInfo = document.querySelector("#help-info"); 
+const bookie = document.querySelector("form"); 
+const betInput = document.querySelector("input"); 
 
 // Displays player funds information
 chipsEl.textContent = `$${player.chips}`; 
@@ -61,34 +64,41 @@ betEl.textContent = `$${player.bet}`;
 
 // Hides reset button until later
 resetButton.style.display = "none";
+bookie.style.display = "none"; 
 
 // The following function generates a random whole number between 2 - 11
 function getRandomCard() {
     return Math.floor(Math.random() * (12 - 2) + 2);
 }
 
+// Make a bet and store the value
+function giveMeYourMoney() {
+    bookie.style.display = "flex";
+    betInput.setAttribute("max", `${player.chips}`); 
+    bookie.addEventListener("submit", function (event) {
+        event.preventDefault();
+        // Store player input as bet value
+        player.bet = betInput.value;
+        player.bet = parseInt(player.bet); 
+        // Display bet info
+        chipsEl.textContent = `$${player.chips}`;
+        betEl.textContent = `$${player.bet}`;
+        bookie.style.display = "none";
+    })
+}
+
 // Clicking "Start Game" calls on startGame()
-
 startButton.addEventListener("click", startGame); 
-
 function startGame() {
-    if (gameStarted == true) {
-        message = "You've already started a game, you silly goose.";
-        messageEl.textContent = `${message}`; 
-    } else {
-        hasMoney = true; 
-        gameStarted = true; 
-        roundInProgress = true; 
-        firstCard = getRandomCard();
-        secondCard = getRandomCard();
-        sum = firstCard + secondCard; 
-        cards.push(firstCard, secondCard); // Adds the cards to the cards array 
-        // Make bet and deduct from current funds
-        player.bet = prompt(`You currently have $${player.chips}. What is your bet? (Please enter a number with no other symbols or characters. 🙏)`); 
-        // Converts the bet from a string to a number 
-        player.bet = parseInt(player.bet);  
-        luckyDrawCheck();
-    } 
+    giveMeYourMoney(); 
+    hasMoney = true; 
+    gameStarted = true; 
+    roundInProgress = true;  
+    firstCard = getRandomCard();
+    secondCard = getRandomCard();
+    sum = firstCard + secondCard; 
+    cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+    luckyDrawCheck();
     // Hide start button
     startButton.style.display = "none";
 }
@@ -130,7 +140,6 @@ function renderGame() {
     messageEl.textContent = `${message}`; 
 }
 
-
 // Changes the chips value based on win/lose conditions
 function chipsManager() {
     if (roundWon == true && hasMoney == true && roundLost == false && roundInProgress == false) {
@@ -164,83 +173,88 @@ function heyBigSpender() {
 
 // Clicking "New Card" calls on newCard()
 document.querySelector("#newCard-btn").addEventListener("click", newCard); 
-
 function newCard() {
-    if (hasMoney == true && roundWon == false && roundLost == false && roundInProgress == true) {
-        let anotherCard = getRandomCard();  
-        sum += anotherCard;
-        cards.push(anotherCard);
-        renderGame(); 
-    } else if (hasMoney == true && roundWon == true) {
-        message = "You've won this round! Care to play another?"; 
-    } else if (gameStarted === false) {
-        message = `Click "Start Game" to begin.`; 
-    } else if (hasMoney == false) {
-        message = "You're done, kiddo."; 
-    } else if (roundInProgress == false || roundLost == true && hasMoney == true) {
-        message = "This round has ended. Care to start a new one?"; 
+    if (bookie.style.display == "flex") {
+        message = "Place your bet first!"
+        messageEl.textContent = `${message}`;
+    } else {
+        if (hasMoney == true && roundWon == false && roundLost == false && roundInProgress == true) {
+            let anotherCard = getRandomCard();  
+            sum += anotherCard;
+            cards.push(anotherCard);
+            renderGame(); 
+        } else if (gameStarted === false) {
+            message = `Click "Start Game" to begin.`;
+            messageEl.textContent = `${message}`;
+        } else if (hasMoney == true && roundWon == true) {
+            message = "You've won this round! Care to play another?"; 
+        } else if (hasMoney == false) {
+            message = "You're done, kiddo."; 
+        } else if (roundInProgress == false || roundLost == true && hasMoney == true) {
+            message = "This round has ended. Care to start a new one?"; 
+        }
+        messageEl.textContent = `${message}`;
     }
-    messageEl.textContent = `${message}`;
 }
 
 document.querySelector("#newRound-btn").addEventListener("click", newRound); 
-
 function newRound() {
-    if (hasMoney == true && gameStarted == true && roundInProgress == false) {
-        // Reset the roundLost and roundWon variables
-        roundLost = false; 
-        roundWon = false; 
-        // Clear the cards array
-        cards.splice(0); 
-        // Draw new cards and make new bet
-        firstCard = getRandomCard(); 
-        secondCard = getRandomCard(); 
-        sum = firstCard + secondCard;
-        cards.push(firstCard, secondCard);
-        player.bet = prompt(`You currently have $${player.chips}. What is your bet? (Please enter a number with no other symbols or characters. 🙏)`);
-        player.bet = parseInt(player.bet);
-        luckyDrawCheck();
-    } else if (hasMoney == false && gameStarted == true) {
-        message = "Get out of my casino."; 
-    } else if (gameStarted == false) {
+    if (gameStarted === false) {
         message = `Click "Start Game" to begin.`;
-    } else if (roundInProgress == true) {
-        message = `Round is still in progress! Select "End Round" to keep half your bet.`;
+        messageEl.textContent = `${message}`;
+    } else {
+        giveMeYourMoney();
+        if (hasMoney == true && gameStarted == true && roundInProgress == false) {
+            // Reset the roundLost and roundWon variables
+            roundLost = false; 
+            roundWon = false; 
+            // Clear the cards array
+            cards.splice(0); 
+            firstCard = getRandomCard(); 
+            secondCard = getRandomCard(); 
+            sum = firstCard + secondCard;
+            cards.push(firstCard, secondCard);
+            luckyDrawCheck();
+        } else if (hasMoney == false && gameStarted == true) {
+            message = "Get out of my casino."; 
+        } else if (roundInProgress == true) {
+            message = `Round is still in progress! Select "End Round" to keep half your bet.`;
+        }
     }
-    messageEl.textContent = `${message}`;
 }
 
 document.querySelector("#endRound-btn").addEventListener("click", endRound); 
-
 function endRound() {
-    if (roundInProgress == false || roundLost == true) {
-        message = "Round has already ended!"; 
+    if (bookie.style.display == "flex") {
+        message = "Place your bet first!"
+        messageEl.textContent = `${message}`;
+    } else {
+        if (gameStarted === false) {
+            message = `Click "Start Game" to begin.`;
+            messageEl.textContent = `${message}`;
+        } else if (roundInProgress == false || roundLost == true) {
+            message = "Round has already ended!"; 
+        } else if (hasMoney == true && gameStarted == true) {
+            roundInProgress = false
+            roundLost = false;
+            cards.splice(0); 
+            chipsManager(); 
+            message = "You've won back a portion of your bet, based on how close you got to 21.";
+        } else if (hasMoney == false && gameStarted == true) {
+            message = "Get out of my casino.";
+        }
+        messageEl.textContent = `${message}`;
     }
-    else if (hasMoney == true && gameStarted == true) {
-        roundInProgress = false
-        roundLost = false;
-        cards.splice(0); 
-        chipsManager(); 
-        message = "You've won back a portion of your bet, based on how close you got to 21.";
-    } else if (hasMoney == false && gameStarted == true) {
-        message = "Get out of my casino.";
-    } else if (gameStarted == false) {
-        message = `Click "Start Game" to begin.`;
-    }
-    messageEl.textContent = `${message}`;
 }
 
 resetButton.addEventListener("click", resetGame);
-
 function resetGame() {
     window.location.reload(); 
 }
 
 // Show and hide the help info on click
 helpMe.addEventListener("click", giveHelp); 
-
 helpInfo.style.display = "none";
-
 function giveHelp() { 
     if (helpInfo.style.display === "none") {
         helpInfo.style.display = "block"; 

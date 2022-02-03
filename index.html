@@ -31,13 +31,18 @@
             <div class="special-buttons">
                 <button id="start-btn">Start Game</button>
                 <button id="reset-btn">Travel back in time...</button>
+                <form id="bookie">
+                    <label for="bet-input" class="sr-only">Place your bet here</label>
+                    <input type="number" name="bet-input" id="bet-input" min="1">
+                    <button id="bet-button">Place Bet</button>
+                </form>
             </div>
 
             <!-- Game Buttons -->
             <div class="game-buttons">
                 <button id="newCard-btn">New Card</button>
-                <button id="newRound-btn">New Round</button>
                 <button id="endRound-btn">End Round</button>
+                <button id="newRound-btn">New Round</button>
             </div>
 
             <!-- Player Funds Info -->
@@ -65,12 +70,11 @@
             </div> <!-- END .help-me -->
         </div> <!-- END .wrapper -->
     </main>
-
     <footer>
         <p>Made with 💕 by Allison Villa</p>
-        <p class="small-copy">I made this simple app as a study tool - you can view its code <a href="https://github.com/allisonvilla/blackjack-game">here</a></p>
+        <p class="small-copy">I built this app as a study tool - you can view its code <a
+                href="https://github.com/allisonvilla/blackjack-game">here</a></p>
     </footer>
-
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,6 +1,16 @@
 /* Setup Styles */
 html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}figcaption,figure,main{display:block}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}dfn{font-style:italic}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}audio,video{display:inline-block}audio:not([controls]){display:none;height:0}img{border-style:none}svg:not(:root){overflow:hidden}button,input,optgroup,select,textarea{font-family:sans-serif;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}button,html [type=button],[type=reset],[type=submit]{-webkit-appearance:button}button::-moz-focus-inner,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner{border-style:none;padding:0}button:-moz-focusring,[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{display:inline-block;vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details,menu{display:block}summary{display:list-item}canvas{display:inline-block}template{display:none}[hidden]{display:none}
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; border: 0; padding: 0; white-space: nowrap; clip-path: inset(100%); clip: rect(0 0 0 0); overflow: hidden;}
@@ -13,10 +23,12 @@ html {
 
 main {
     background-color: #1d3527;
+    padding-top: 20px;
+    padding-bottom: 50px; 
 }
 
 .wrapper {
-    width: 60%;
+    width: 90%; 
     max-width: 480px; 
     margin: 0 auto; 
     display: flex;
@@ -47,13 +59,37 @@ p, li {
 .wrapper > div {
     margin-top: 10px;
     margin-bottom: 10px; 
+    min-width: 100%; 
+}
+
+/* Generic button styles */
+button {
+    font-family: 'Lato', sans-serif;
+    border: none; 
+    background-color: #cfaa30;
+    color: #f0eee2;  
+    padding: 10px 25px; 
+    border: 2px solid transparent; 
+    border-radius: 10px; 
+    transition: 0.3s; 
+}
+
+button:hover,
+button:focus {
+    cursor: pointer;
+    background-color: #F0EEE2;
+    border: 2px solid #cfaa30;
+    color: black;
+    box-shadow: 0 0.5em 0.5em -0.4em #f8ea90;
+    transform: translateY(-4px);
 }
 
 /* Title & Message */
-.title-message {
+div.title-message {
     background-color: #f0eee2;
     border-radius: 15px; 
     padding: 0px 25px 15px 25px; 
+    margin-top: 30px; 
 }
 
 /* Game Info */
@@ -72,19 +108,48 @@ p, li {
     font-weight: 300; 
 }
 
-/* The Buttons */
-button {
-    font-family: 'Lato', sans-serif;
-    border: none; 
-    background-color: #cfaa30;
-    color: #f0eee2;  
-    padding: 10px 25px; 
-    border-radius: 10px; 
+/* Bookie Styles */ 
+#bookie {
+    display: flex; 
+    margin-top: 20px; 
+    margin-bottom: 20px; 
 }
 
+#bet-input {
+    border: none; 
+    outline: none; 
+    border-bottom: 4px solid transparent; 
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; 
+    padding: 0 20px; 
+}
+
+#bet-input:focus {
+    border-bottom: 4px solid #cfaa30; 
+}
+
+#bet-button {
+    border-radius: 0; 
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; 
+    border: none; 
+}
+
+#bet-button:hover,
+#bet-button:focus {
+    box-shadow: none; 
+    transform: none; 
+    border: none; 
+    color: white; 
+    background-color: #80BAAB; 
+}
+
+/* Game Buttons */
 .special-buttons {
     display: flex; 
+    flex-direction: column; 
     justify-content: center;
+    align-items: center; 
 }
 
 .game-buttons {
@@ -162,4 +227,26 @@ a {
 a:hover,
 a:focus {
     border-bottom: 2px solid #ebc95a;
+}
+
+@media (max-width: 515px) {
+    html {
+        font-size: 110%; 
+    }
+}
+
+@media (max-width: 475px) {
+    .game-buttons {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; 
+    }
+
+    .game-buttons button {
+        margin-bottom: 20px; 
+    }
+
+    button {
+        width: 70%; 
+    }
 }
