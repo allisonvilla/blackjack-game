@@ -15,12 +15,13 @@
 // (Fixed) Remove ability to keep drawing new cards after losing a round
 // (Fixed) Remove ability to click start game after running out of money
 // (Done) Add end round function which ends the round and lets player keep (some) winnings
-// (Fixed) Fix betting system so that player funds are actually deducted
+// (Fixed) Fix betting so that player funds are actually deducted
 // (Fixed) Winning blackjack concatenates your bet to your funds instead of adding
 // (Fixed) Can draw a new card after ending the round
 // (Fixed) If you win blackjack on your first draw, your bet doesn't get deducted and your winnings are not added
 // (Done) Hide "Start Game" button after starting a game
 // (Done) Add and show "Reset" button after losing all your money
+// (Done) Ending a round early awards you a portion of the bet based on how close you got to 21
 
 // Player object
 const player = {
@@ -74,17 +75,16 @@ function startGame() {
         hasMoney = true; 
         gameStarted = true; 
         roundInProgress = true; 
-        firstCard = 9;
-        secondCard = 10;
+        firstCard = getRandomCard();
+        secondCard = getRandomCard();
         sum = firstCard + secondCard; 
         cards.push(firstCard, secondCard); // Adds the cards to the cards array 
         // Make bet and deduct from current funds
         player.bet = prompt(`You currently have $${player.chips}. What is your bet? (Please enter a number with no other symbols or characters. 🙏)`); 
         // Converts the bet from a string to a number 
-        player.bet = parseInt(player.bet); 
-        player.chips = player.chips - player.bet;
+        player.bet = parseInt(player.bet);  
         luckyDrawCheck();
-    }
+    } 
     // Hide start button
     startButton.style.display = "none";
 }
@@ -92,7 +92,7 @@ function startGame() {
 // Function that checks for a natural before rendering game
 function luckyDrawCheck() {
     if (sum === 21) {
-        player.chips = player.chips + player.bet * 2;
+        player.chips += player.bet;
         message = "You got blackjack!";
         roundLost = false;
         roundWon = true;
@@ -122,7 +122,7 @@ function renderGame() {
         roundInProgress = false; 
     }
     chipsManager(); 
-    areYouBroke();
+    heyBigSpender();
     messageEl.textContent = `${message}`; 
 }
 
@@ -131,16 +131,20 @@ function renderGame() {
 function chipsManager() {
     if (roundWon == true && hasMoney == true && roundLost == false && roundInProgress == false) {
         // Full winnings for blackjack 
-        player.chips = player.chips + player.bet * 2; 
+        player.chips += player.bet; 
+    } else if (roundWon == false && roundLost == true && roundInProgress == false) {
+        // Deduct bet for losers
+        player.chips -= player.bet;
     } else if (roundWon == false && hasMoney == true && roundLost == false && roundInProgress == false) {
-        // Half winnings for early enders
-        player.chips = player.chips + player.bet / 2; 
+        // Partial winnings for early enders, based on how close they got to 21
+        player.chips = player.chips - player.bet + (player.bet * ( sum / 21 )); 
+        player.chips = Math.round(player.chips * 100) / 100;
     }
     playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`; 
 }
 
 // If the player runs out of chips, they perma-lose
-function areYouBroke() {
+function heyBigSpender() {
     if (player.chips >= 1) {
         hasMoney = true;
     } else if (player.chips <= 0) {
@@ -153,20 +157,12 @@ function areYouBroke() {
     }
 }
 
-// Different conditions if player bets it all
-function heyBigSpender() {
-    if (player.bet === player.chips) {
-        player.chips += 0.01;
-        return true; 
-    }
-}
-
 // Clicking "New Card" calls on newCard()
 document.querySelector("#newCard-btn").addEventListener("click", newCard); 
 
 function newCard() {
     if (hasMoney == true && roundWon == false && roundLost == false && roundInProgress == true) {
-        let anotherCard = 2;  
+        let anotherCard = getRandomCard();  
         sum += anotherCard;
         cards.push(anotherCard);
         renderGame(); 
@@ -198,7 +194,6 @@ function newRound() {
         cards.push(firstCard, secondCard);
         player.bet = prompt(`You currently have $${player.chips}. What is your bet? (Please enter a number with no other symbols or characters. 🙏)`);
         player.bet = parseInt(player.bet);
-        player.chips = player.chips - player.bet;
         luckyDrawCheck();
     } else if (hasMoney == false && gameStarted == true) {
         message = "Get out of my casino."; 
@@ -221,7 +216,7 @@ function endRound() {
         roundLost = false;
         cards.splice(0); 
         chipsManager(); 
-        message = "You've won back half your bet.";
+        message = "You've won back a portion of your bet, based on how close you got to 21.";
     } else if (hasMoney == false && gameStarted == true) {
         message = "Get out of my casino.";
     } else if (gameStarted == false) {
