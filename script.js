@@ -1,25 +1,26 @@
 // TO-DO LIST
 
 // Fixes:
-// Optimize this spaghetti code - maybe I should use some loops????
+// Optimize this spaghetti code
 
 // New Features:
-// Hide "Start Game" button after starting a game
-// Add and show "Reset" button after losing all your money
-// Proper input for player bet that checks for type and funds
 // Quick instructions for the player
+// Make pretty
+// Proper input for player bet that checks for type and funds
 
 // ✔ DONE
-// Add new round function and button
-// Add the option to change your bet
-// Remove ability to start a new round while a current one is ongoing
-// Remove ability to keep drawing new cards after losing a round
-// Remove ability to click start game after running out of money
-// Add end round function which ends the round and lets player keep (some) winnings
-// Fix betting system so that player funds are actually deducted
-// (Bug Fixed) Winning blackjack concatenates your bet to your funds instead of adding
-// (Bug Fixed) Can draw a new card after ending the round
-// (Bug Fixed) If you win blackjack on your first draw, your bet doesn't get deducted and your winnings are not added
+// (Done) Add new round function and button
+// (Done) Add the option to change your bet
+// (Fixed) Remove ability to start a new round while a current one is ongoing
+// (Fixed) Remove ability to keep drawing new cards after losing a round
+// (Fixed) Remove ability to click start game after running out of money
+// (Done) Add end round function which ends the round and lets player keep (some) winnings
+// (Fixed) Fix betting system so that player funds are actually deducted
+// (Fixed) Winning blackjack concatenates your bet to your funds instead of adding
+// (Fixed) Can draw a new card after ending the round
+// (Fixed) If you win blackjack on your first draw, your bet doesn't get deducted and your winnings are not added
+// (Done) Hide "Start Game" button after starting a game
+// (Done) Add and show "Reset" button after losing all your money
 
 // Player object
 const player = {
@@ -33,7 +34,7 @@ let hasMoney = false;
 let gameStarted = false; 
 let roundInProgress = false; 
 let roundWon = false; 
-let roundLost = false; // Need both because you can end a round without winning or losing!
+let roundLost = false; // Need both because you can end a round without winning or losing
 let message = ""; 
 let firstCard = 0;
 let secondCard = 0;
@@ -47,9 +48,14 @@ const messageEl = document.querySelector("#message-el");
 const sumEl = document.querySelector("#sum-el");
 const cardsEl = document.querySelector("#cards-el"); 
 const playerEl = document.querySelector("#player-el"); 
+const startButton = document.querySelector("#start-btn");
+const resetButton = document.querySelector("#reset-btn"); 
 
 // Displays player funds information
 playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`; 
+
+// Hides reset button until later
+resetButton.style.display = "none";
 
 // The following function generates a random whole number between 2 - 11
 function getRandomCard() {
@@ -57,7 +63,8 @@ function getRandomCard() {
 }
 
 // Clicking "Start Game" calls on startGame()
-document.getElementById("start-btn").addEventListener("click", startGame); 
+
+startButton.addEventListener("click", startGame); 
 
 function startGame() {
     if (gameStarted == true) {
@@ -67,17 +74,19 @@ function startGame() {
         hasMoney = true; 
         gameStarted = true; 
         roundInProgress = true; 
-        firstCard = getRandomCard();
-        secondCard = getRandomCard();
+        firstCard = 9;
+        secondCard = 10;
         sum = firstCard + secondCard; 
         cards.push(firstCard, secondCard); // Adds the cards to the cards array 
         // Make bet and deduct from current funds
-        player.bet = prompt("You start with $1000. What is your bet? (Please enter a number with no other symbols or characters. 🙏)"); 
+        player.bet = prompt(`You currently have $${player.chips}. What is your bet? (Please enter a number with no other symbols or characters. 🙏)`); 
         // Converts the bet from a string to a number 
         player.bet = parseInt(player.bet); 
         player.chips = player.chips - player.bet;
         luckyDrawCheck();
     }
+    // Hide start button
+    startButton.style.display = "none";
 }
 
 // Function that checks for a natural before rendering game
@@ -91,7 +100,6 @@ function luckyDrawCheck() {
     } else {
         renderGame();
     }
-    playerEl.textContent = `Current Funds: $${player.chips} | Current Bet: $${player.bet}`; 
     messageEl.textContent = `${message}`; 
 }
 
@@ -140,6 +148,16 @@ function areYouBroke() {
         roundInProgress = false; 
         message = "You're out of money. Thanks for playing!";
         messageEl.textContent = `${message}`;
+        // Show reset button
+        resetButton.style.display = "inline-block";
+    }
+}
+
+// Different conditions if player bets it all
+function heyBigSpender() {
+    if (player.bet === player.chips) {
+        player.chips += 0.01;
+        return true; 
     }
 }
 
@@ -148,7 +166,7 @@ document.querySelector("#newCard-btn").addEventListener("click", newCard);
 
 function newCard() {
     if (hasMoney == true && roundWon == false && roundLost == false && roundInProgress == true) {
-        let anotherCard = 2;
+        let anotherCard = 2;  
         sum += anotherCard;
         cards.push(anotherCard);
         renderGame(); 
@@ -174,13 +192,11 @@ function newRound() {
         // Clear the cards array
         cards.splice(0); 
         // Draw new cards and make new bet
-        firstCard = 10;
-        secondCard = 11;
-        // getRandomCard(); 
+        firstCard = getRandomCard(); 
+        secondCard = getRandomCard(); 
         sum = firstCard + secondCard;
         cards.push(firstCard, secondCard);
-        // Make new bet and deduct from current funds
-        player.bet = prompt("What is your new bet? (Please enter a number with no other symbols or characters. 🙏)");
+        player.bet = prompt(`You currently have $${player.chips}. What is your bet? (Please enter a number with no other symbols or characters. 🙏)`);
         player.bet = parseInt(player.bet);
         player.chips = player.chips - player.bet;
         luckyDrawCheck();
@@ -212,4 +228,10 @@ function endRound() {
         message = `Click "Start Game" to begin.`;
     }
     messageEl.textContent = `${message}`;
+}
+
+resetButton.addEventListener("click", resetGame);
+
+function resetGame() {
+    window.location.reload(); 
 }
