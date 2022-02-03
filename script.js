@@ -90,24 +90,29 @@ function giveMeYourMoney() {
 // Clicking "Start Game" calls on startGame()
 startButton.addEventListener("click", startGame); 
 function startGame() {
-    giveMeYourMoney(); 
-    hasMoney = true; 
-    gameStarted = true; 
-    roundInProgress = true;  
-    firstCard = getRandomCard();
-    secondCard = getRandomCard();
-    sum = firstCard + secondCard; 
-    cards.push(firstCard, secondCard); // Adds the cards to the cards array 
-    luckyDrawCheck();
-    // Hide start button
-    startButton.style.display = "none";
+    giveMeYourMoney();
+    if (player.bet === 0) {
+        message = "Place your bet and hit start again.";
+        messageEl.textContent = `${message}`; 
+    } else {
+        hasMoney = true; 
+        gameStarted = true; 
+        roundInProgress = true;  
+        firstCard = 11; 
+        secondCard = 10; 
+        sum = firstCard + secondCard; 
+        cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+        luckyDrawCheck();
+        // Hide start button
+        startButton.style.display = "none";
+    }
 }
 
 // Function that checks for a natural before rendering game
 function luckyDrawCheck() {
     if (sum === 21) {
         player.chips = player.chips + player.bet * 2;
-        message = "You got blackjack!";
+        message = "You got blackjack! You win double your bet for being so lucky.";
         roundLost = false;
         roundWon = true;
         roundInProgress = false; 
@@ -115,6 +120,8 @@ function luckyDrawCheck() {
         renderGame();
     }
     messageEl.textContent = `${message}`; 
+    chipsEl.textContent = `$${player.chips}`;
+    betEl.textContent = `$${player.bet}`; 
 }
 
 function renderGame() {
@@ -169,6 +176,8 @@ function heyBigSpender() {
         // Show reset button
         resetButton.style.display = "inline-block";
     }
+    chipsEl.textContent = `$${player.chips}`;
+    betEl.textContent = `$${player.bet}`; 
 }
 
 // Clicking "New Card" calls on newCard()
