@@ -114,8 +114,7 @@ function startGame() {
     }
 }
 
-// Function that checks for a natural before rendering game
-// Could probably merge this with renderGame()
+// Used to check for a natural at the first deal
 function luckyDrawCheck() {
     if (sum === 21) {
         player.chips = player.chips + player.bet * 2;
@@ -129,12 +128,11 @@ function luckyDrawCheck() {
     messageEl.textContent = `${message}`; 
     chipsEl.textContent = `$${player.chips}`;
     betEl.textContent = `$${player.bet}`; 
+    cardsEl.textContent = cards.join(" | ");
+    sumEl.textContent = `${sum}`; 
 }
 
 function renderGame() {
-    // cardsEl element will display the cards in the cards array - this used to be a for-loop
-    cardsEl.textContent = cards.join(" | ");
-    sumEl.textContent = `${sum}`; 
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
         roundInProgress = true; 
@@ -152,6 +150,8 @@ function renderGame() {
     chipsManager(); 
     heyBigSpender();
     messageEl.textContent = `${message}`; 
+    cardsEl.textContent = cards.join(" | ");
+    sumEl.textContent = `${sum}`; 
 }
 
 // Changes the chips value based on win/lose conditions
@@ -202,7 +202,7 @@ function newCard() {
             } else {
                 dealTwoCards(); 
             }
-            luckyDrawCheck(); 
+            renderGame(); 
         } else if (gameStarted === false) {
             message = `Click "Start Game" to begin.`;
             messageEl.textContent = `${message}`;
