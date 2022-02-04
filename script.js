@@ -1,10 +1,8 @@
 // TO-DO LIST
 
 // Fixes:
+// On new round, don't show cards until bet is placed
 // Optimize this spaghetti code
-
-// New Features:
-// Don't show cards until bet is placed
 
 // ✔ DONE
 // (Done) Add new round function and button
@@ -20,14 +18,14 @@
 // (Done) Hide "Start Game" button after starting a game
 // (Done) Add and show "Reset" button after losing all your money
 // (Done) Ending a round early awards you a portion of the bet based on how close you got to 21
-// (Done) Quick instructions for the player
+// (Done) Instructions for the player
 // (Done) Proper input for player bet that checks for type and funds
 // (Done) Make pretty 
 
 // Player object
 const player = {
     bet: 0,
-    chips: 1000
+    chips: 100
 }
 // Player is currently prompted to make a bet in startGame() and newRound() 
 
@@ -74,13 +72,15 @@ function getRandomCard() {
 // Make a bet and store the value
 function giveMeYourMoney() {
     bookie.style.display = "flex";
+    // Set maximum bet amount to current player funds
     betInput.setAttribute("max", `${player.chips}`); 
     bookie.addEventListener("submit", function (event) {
+        // Prevents submitting the form from refreshing the page
         event.preventDefault();
         // Store player input as bet value
         player.bet = betInput.value;
         player.bet = parseInt(player.bet); 
-        // Display bet info
+        // Display bet info and hide the bookie
         chipsEl.textContent = `$${player.chips}`;
         betEl.textContent = `$${player.bet}`;
         bookie.style.display = "none";
@@ -212,8 +212,8 @@ function newRound() {
         message = `Click "Start Game" to begin.`;
         messageEl.textContent = `${message}`;
     } else {
-        giveMeYourMoney();
         if (hasMoney == true && gameStarted == true && roundInProgress == false) {
+            giveMeYourMoney();
             // Reset the roundLost and roundWon variables
             roundLost = false; 
             roundWon = false; 
