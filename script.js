@@ -2,7 +2,7 @@
 
 // Fixes:
 // Always round to two decimal places
-// Optimize this spaghetti code 
+// Optimize this spaghetti code - maybe group functions that always go together
 
 // ✔ DONE
 // (Done) Add new round function and button
@@ -108,13 +108,15 @@ function startGame() {
         gameStarted = true; 
         roundInProgress = true; 
         dealTwoCards();  
-        renderGame();
+        luckyDrawCheck();
         // Hide start button
         startButton.style.display = "none";
     }
 }
 
-function renderGame() {
+// Function that checks for a natural before rendering game
+// Could probably merge this with renderGame()
+function luckyDrawCheck() {
     if (sum === 21) {
         player.chips = player.chips + player.bet * 2;
         message = "You got blackjack! You win double your bet for being so lucky.";
@@ -122,28 +124,34 @@ function renderGame() {
         roundWon = true;
         roundInProgress = false; 
     } else {
-        cardsEl.textContent = cards.join(" | ");
-        sumEl.textContent = `${sum}`;
-        if (sum <= 20) {
-            message = "Do you want to draw a new card?";
-            roundInProgress = true;
-        } else if (sum === 21) {
-            message = "You win!";
-            roundLost = false;
-            roundWon = true;
-            roundInProgress = false;
-        } else {
-            message = "You lose!";
-            roundLost = true;
-            roundWon = false;
-            roundInProgress = false;
-        }
-        chipsManager();
-        heyBigSpender();
+        renderGame();
     }
     messageEl.textContent = `${message}`; 
     chipsEl.textContent = `$${player.chips}`;
     betEl.textContent = `$${player.bet}`; 
+}
+
+function renderGame() {
+    // cardsEl element will display the cards in the cards array - this used to be a for-loop
+    cardsEl.textContent = cards.join(" | ");
+    sumEl.textContent = `${sum}`; 
+    if (sum <= 20) {
+        message = "Do you want to draw a new card?";
+        roundInProgress = true; 
+    } else if (sum === 21) {
+        message = "You win!";
+        roundLost = false; 
+        roundWon = true;
+        roundInProgress = false; 
+    } else {
+        message = "You lose!";
+        roundLost = true; 
+        roundWon = false; 
+        roundInProgress = false; 
+    }
+    chipsManager(); 
+    heyBigSpender();
+    messageEl.textContent = `${message}`; 
 }
 
 // Changes the chips value based on win/lose conditions
@@ -194,7 +202,7 @@ function newCard() {
             } else {
                 dealTwoCards(); 
             }
-            renderGame(); 
+            luckyDrawCheck(); 
         } else if (gameStarted === false) {
             message = `Click "Start Game" to begin.`;
             messageEl.textContent = `${message}`;
