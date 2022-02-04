@@ -86,6 +86,8 @@ function giveMeYourMoney() {
     })
 }
 
+// make a dealCards function that runs inside giveMeYourMoney
+
 // Clicking "Start Game" calls on startGame()
 startButton.addEventListener("click", startGame); 
 function startGame() {
