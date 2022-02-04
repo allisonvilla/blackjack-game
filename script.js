@@ -2,6 +2,7 @@
 
 // Fixes:
 // On new round, don't show cards until bet is placed
+// Always round to two decimal places
 // Optimize this spaghetti code
 
 // ✔ DONE
@@ -93,7 +94,7 @@ startButton.addEventListener("click", startGame);
 function startGame() {
     if (player.bet === 0) {
         giveMeYourMoney();
-        message = "Place your bet and hit start again.";
+        message = "Place your bet and hit start again. It's $5.00 to play.";
         messageEl.textContent = `${message}`; 
     } else {
         hasMoney = true; 
@@ -167,9 +168,9 @@ function chipsManager() {
 
 // If the player runs out of chips, they perma-lose
 function heyBigSpender() {
-    if (player.chips >= 1) {
+    if (player.chips >= 5) {
         hasMoney = true;
-    } else if (player.chips <= 0) {
+    } else if (player.chips < 5) {
         hasMoney = false;
         roundInProgress = false; 
         message = "You're out of money. Thanks for playing!";
