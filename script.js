@@ -1,9 +1,8 @@
 // TO-DO LIST
 
 // Fixes:
-// On new round, don't show cards until bet is placed
 // Always round to two decimal places
-// Optimize this spaghetti code
+// Optimize this spaghetti code - maybe group functions that always go together
 
 // ✔ DONE
 // (Done) Add new round function and button
@@ -21,7 +20,8 @@
 // (Done) Ending a round early awards you a portion of the bet based on how close you got to 21
 // (Done) Instructions for the player
 // (Done) Proper input for player bet that checks for type and funds
-// (Done) Make pretty 
+// (Done) Make pretty
+// (Fixed) On new round, don't show cards until bet is placed
 
 // Player object
 const player = {
@@ -30,7 +30,7 @@ const player = {
 }
 
 // Initializing variables
-let hasMoney = false; 
+let hasMoney = true; 
 let gameStarted = false; 
 let roundInProgress = false; 
 let roundWon = false; 
@@ -69,7 +69,7 @@ function getRandomCard() {
     return Math.floor(Math.random() * (12 - 2) + 2);
 }
 
-// Make a bet and store the value
+// Show bet input, store bet, hide bet input
 function giveMeYourMoney() {
     bookie.style.display = "flex";
     // Set maximum bet amount to current player funds
@@ -79,7 +79,7 @@ function giveMeYourMoney() {
         event.preventDefault();
         // Store player input as bet value
         player.bet = betInput.value;
-        player.bet = parseInt(player.bet); 
+        player.bet = Number(player.bet);
         // Display bet info and hide the bookie
         chipsEl.textContent = `$${player.chips}`;
         betEl.textContent = `$${player.bet}`;
@@ -87,23 +87,27 @@ function giveMeYourMoney() {
     })
 }
 
-// make a dealCards function that runs inside giveMeYourMoney
+// Deal two cards at the start of a round
+function dealTwoCards() {
+    firstCard = getRandomCard();
+    secondCard = getRandomCard();
+    sum = firstCard + secondCard;
+    sum = Number(sum); 
+    // Pushes the cards to the cards array
+    cards.push(firstCard, secondCard); 
+}
 
 // Clicking "Start Game" calls on startGame()
 startButton.addEventListener("click", startGame); 
 function startGame() {
     if (player.bet === 0) {
         giveMeYourMoney();
-        message = "Place your bet and hit start again. It's $5.00 to play.";
+        message = "Place your bet and hit start again. Minimum $5.00 to play.";
         messageEl.textContent = `${message}`; 
     } else {
-        hasMoney = true; 
         gameStarted = true; 
-        roundInProgress = true;  
-        firstCard = getRandomCard(); 
-        secondCard = getRandomCard(); 
-        sum = firstCard + secondCard; 
-        cards.push(firstCard, secondCard); // Adds the cards to the cards array 
+        roundInProgress = true; 
+        dealTwoCards();  
         luckyDrawCheck();
         // Hide start button
         startButton.style.display = "none";
@@ -111,6 +115,7 @@ function startGame() {
 }
 
 // Function that checks for a natural before rendering game
+// Could probably merge this with renderGame()
 function luckyDrawCheck() {
     if (sum === 21) {
         player.chips = player.chips + player.bet * 2;
@@ -182,18 +187,22 @@ function heyBigSpender() {
     betEl.textContent = `$${player.bet}`; 
 }
 
-// Clicking "New Card" calls on newCard()
+// Clicking "Deal Cards" calls on newCard()
 document.querySelector("#newCard-btn").addEventListener("click", newCard); 
 function newCard() {
     if (bookie.style.display == "flex") {
         message = "Place your bet first!"
-        messageEl.textContent = `${message}`;
     } else {
         if (hasMoney == true && roundWon == false && roundLost == false && roundInProgress == true) {
-            let anotherCard = getRandomCard();  
-            sum += anotherCard;
-            cards.push(anotherCard);
-            renderGame(); 
+            // Check cards array length - if more than two, deal one card; if none, deal two cards 
+            if (cards.length >= 2) {
+                let anotherCard = getRandomCard();
+                sum += anotherCard;
+                cards.push(anotherCard);
+            } else {
+                dealTwoCards(); 
+            }
+            luckyDrawCheck(); 
         } else if (gameStarted === false) {
             message = `Click "Start Game" to begin.`;
             messageEl.textContent = `${message}`;
@@ -204,8 +213,8 @@ function newCard() {
         } else if (roundInProgress == false || roundLost == true && hasMoney == true) {
             message = "This round has ended. Care to start a new one?"; 
         }
-        messageEl.textContent = `${message}`;
     }
+    messageEl.textContent = `${message}`;
 }
 
 document.querySelector("#newRound-btn").addEventListener("click", newRound); 
@@ -215,23 +224,24 @@ function newRound() {
         messageEl.textContent = `${message}`;
     } else {
         if (hasMoney == true && gameStarted == true && roundInProgress == false) {
-            giveMeYourMoney();
             // Reset the roundLost and roundWon variables
-            roundLost = false; 
+            roundLost = false;
             roundWon = false; 
+            roundInProgress = true; 
             // Clear the cards array
             cards.splice(0); 
-            firstCard = getRandomCard(); 
-            secondCard = getRandomCard(); 
-            sum = firstCard + secondCard;
-            cards.push(firstCard, secondCard);
-            luckyDrawCheck();
+            sum = "";
+            // Ask for new bet
+            message = `Place your bet then hit "Deal Cards".`
+            giveMeYourMoney();
         } else if (hasMoney == false && gameStarted == true) {
             message = "Get out of my casino."; 
         } else if (roundInProgress == true) {
             message = `Round is still in progress! Select "End Round" to keep half your bet.`;
         }
         messageEl.textContent = `${message}`
+        cardsEl.textContent = cards.join(" | ");
+        sumEl.textContent = `${sum}`; 
     }
 }
 
@@ -240,7 +250,7 @@ function endRound() {
     if (bookie.style.display == "flex") {
         message = "Place your bet first!"
         messageEl.textContent = `${message}`;
-    } else {
+        } else {
         if (gameStarted === false) {
             message = `Click "Start Game" to begin.`;
             messageEl.textContent = `${message}`;
@@ -251,11 +261,12 @@ function endRound() {
         } else if (hasMoney == true && gameStarted == true) {
             roundInProgress = false
             roundLost = false;
-            cards.splice(0); 
             chipsManager(); 
             message = "You've won back a portion of your bet, based on how close you got to 21.";
         }
         messageEl.textContent = `${message}`;
+        cardsEl.textContent = cards.join(" | ");
+        sumEl.textContent = `${sum}`; 
     }
 }
 
