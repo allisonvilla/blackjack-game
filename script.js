@@ -27,7 +27,6 @@ const player = {
     bet: 0,
     chips: 100
 }
-// Player is currently prompted to make a bet in startGame() and newRound() 
 
 // Initializing variables
 let hasMoney = false; 
@@ -229,6 +228,7 @@ function newRound() {
         } else if (roundInProgress == true) {
             message = `Round is still in progress! Select "End Round" to keep half your bet.`;
         }
+        messageEl.textContent = `${message}`
     }
 }
 
@@ -241,6 +241,8 @@ function endRound() {
         if (gameStarted === false) {
             message = `Click "Start Game" to begin.`;
             messageEl.textContent = `${message}`;
+        } else if (hasMoney == false && gameStarted == true) {
+            message = "Get out of my casino.";
         } else if (roundInProgress == false || roundLost == true) {
             message = "Round has already ended!"; 
         } else if (hasMoney == true && gameStarted == true) {
@@ -249,8 +251,6 @@ function endRound() {
             cards.splice(0); 
             chipsManager(); 
             message = "You've won back a portion of your bet, based on how close you got to 21.";
-        } else if (hasMoney == false && gameStarted == true) {
-            message = "Get out of my casino.";
         }
         messageEl.textContent = `${message}`;
     }
