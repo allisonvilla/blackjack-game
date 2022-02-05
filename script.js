@@ -64,7 +64,7 @@ const bookie = document.querySelector("form");
 const betInput = document.querySelector("input"); 
 
 // Displays player funds information
-chipsEl.textContent = `$${player.chips}`; 
+chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`; 
 betEl.textContent = `$${player.bet}`; 
 
 // Hides some elements until later
@@ -89,9 +89,9 @@ function giveMeYourMoney() {
         event.preventDefault();
         // Store player input as bet value
         player.bet = betInput.value;
-        player.bet = Number.parseFloat(player.bet).toFixed(2); 
+        player.bet = Number(player.bet);
         // Display bet info and hide the bookie
-        chipsEl.textContent = `$${player.chips}`;
+        chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
         betEl.textContent = `$${player.bet}`;
         bookie.style.display = "none";
     })
@@ -129,7 +129,7 @@ function startGame() {
 function luckyDrawCheck() {
     if (sum === 21) {
         player.chips = player.chips + player.bet * 2;
-        player.chips = Number.parseFloat(player.chips).toFixed(2); 
+        player.chips = Number(player.chips);
         message = "You got blackjack! You win double your bet for being so lucky.";
         roundLost = false;
         roundWon = true;
@@ -141,7 +141,7 @@ function luckyDrawCheck() {
         renderGame();
     }
     messageEl.textContent = `${message}`; 
-    chipsEl.textContent = `$${player.chips}`;
+    chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
     betEl.textContent = `$${player.bet}`; 
     cardsEl.textContent = cards.join(" | ");
     sumEl.textContent = `${sum}`; 
@@ -179,17 +179,17 @@ function chipsManager() {
     if (roundWon == true && hasMoney == true && roundLost == false && roundInProgress == false) {
         // Full winnings for getting 21
         player.chips += player.bet; 
-        player.chips = Number.parseFloat(player.chips).toFixed(2); 
+        player.chips = Number(player.chips); 
     } else if (roundWon == false && roundLost == true && roundInProgress == false) {
         // Deduct bet for losers
         player.chips -= player.bet;
-        player.chips = Number.parseFloat(player.chips).toFixed(2); 
+        player.chips = Number(player.chips); 
     } else if (roundWon == false && hasMoney == true && roundLost == false && roundInProgress == false) {
         // Partial winnings for early enders, based on how close they got to 21
         player.chips = player.chips - player.bet + (player.bet * ( sum / 21 )); 
-        player.chips = Number.parseFloat(player.chips).toFixed(2); 
+        player.chips = Number(player.chips); 
     }
-    chipsEl.textContent = `$${player.chips}`;
+    chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
     betEl.textContent = `$${player.bet}`; 
 }
 
@@ -205,7 +205,7 @@ function heyBigSpender() {
         // Show reset button
         resetButton.style.display = "inline-block";
     }
-    chipsEl.textContent = `$${player.chips}`;
+    chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
     betEl.textContent = `$${player.bet}`; 
 }
 
