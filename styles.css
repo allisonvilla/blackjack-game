@@ -145,14 +145,14 @@ div.title-message {
 }
 
 /* Game Buttons */
-.special-buttons {
+div.special-buttons {
     display: flex; 
     flex-direction: column; 
     justify-content: center;
-    align-items: center; 
+    align-items: center;  
 }
 
-.game-buttons {
+div.game-buttons {
     display: flex; 
     justify-content: center; 
 }
@@ -257,5 +257,12 @@ a:focus {
 
     button {
         width: 70%; 
+    }
+}
+
+@media (max-width: 375px) {
+    #bet-button {
+        padding-left: 15px;
+        padding-right: 15px; 
     }
 }

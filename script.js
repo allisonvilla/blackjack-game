@@ -209,7 +209,7 @@ function heyBigSpender() {
     betEl.textContent = `$${player.bet}`; 
 }
 
-document.querySelector("#newCard-btn").addEventListener("click", newCard); 
+dealButton.addEventListener("click", newCard); 
 function newCard() {
     if (bookie.style.display == "flex") {
         message = "Place your bet first!"
@@ -238,7 +238,7 @@ function newCard() {
     messageEl.textContent = `${message}`;
 }
 
-document.querySelector("#newRound-btn").addEventListener("click", newRound); 
+newButton.addEventListener("click", newRound); 
 function newRound() {
     if (gameStarted === false) {
         message = `Click "Start Game" to begin.`;
@@ -268,7 +268,7 @@ function newRound() {
     }
 }
 
-document.querySelector("#endRound-btn").addEventListener("click", endRound); 
+endButton.addEventListener("click", endRound); 
 function endRound() {
     if (bookie.style.display == "flex") {
         message = "Place your bet first!"
