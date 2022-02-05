@@ -154,7 +154,12 @@ div.title-message {
 
 .game-buttons {
     display: flex; 
-    justify-content: space-between; 
+    justify-content: center; 
+}
+
+.game-buttons button {
+    margin: 0 5px; 
+    min-width: 155.43px; 
 }
 
 /* Player Funds Info */
@@ -232,6 +237,10 @@ a:focus {
 @media (max-width: 515px) {
     html {
         font-size: 110%; 
+    }
+
+    .game-buttons button {
+        min-width: 143.43px; 
     }
 }
 

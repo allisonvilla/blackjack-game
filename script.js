@@ -1,8 +1,7 @@
 // TO-DO LIST
 
 // Fixes:
-// Always round to two decimal places
-// Optimize this spaghetti code - maybe group functions that always go together
+// Optimize this spaghetti code
 
 // ✔ DONE
 // (Done) Add new round function and button
@@ -22,6 +21,9 @@
 // (Done) Proper input for player bet that checks for type and funds
 // (Done) Make pretty
 // (Fixed) On new round, don't show cards until bet is placed
+// (Fixed) Always round to two decimal places
+// (Fixed) Allow decimal bets
+// (Done) Only show necessary buttons
 
 // Player object
 const player = {
@@ -43,16 +45,21 @@ let sum = 0;
 // Cards array
 const cards = []; 
 
-// Storing html elements in variables
+//Information elements
 const messageEl = document.querySelector("#message-el");
 const sumEl = document.querySelector("#sum-el");
 const cardsEl = document.querySelector("#cards-el"); 
 const chipsEl = document.querySelector("#chips-el"); 
 const betEl = document.querySelector("#bet-el"); 
-const startButton = document.querySelector("#start-btn");
-const resetButton = document.querySelector("#reset-btn"); 
-const helpMe = document.querySelector("#help-click"); 
 const helpInfo = document.querySelector("#help-info"); 
+
+// Button and input elements
+const startButton = document.querySelector("#start-btn");
+const endButton = document.querySelector("#endRound-btn");
+const resetButton = document.querySelector("#reset-btn"); 
+const newButton = document.querySelector("#newRound-btn");
+const dealButton = document.querySelector("#newCard-btn");
+const helpMe = document.querySelector("#help-click"); 
 const bookie = document.querySelector("form"); 
 const betInput = document.querySelector("input"); 
 
@@ -60,9 +67,12 @@ const betInput = document.querySelector("input");
 chipsEl.textContent = `$${player.chips}`; 
 betEl.textContent = `$${player.bet}`; 
 
-// Hides reset button until later
+// Hides some elements until later
 resetButton.style.display = "none";
 bookie.style.display = "none"; 
+endButton.style.display = "none";
+newButton.style.display = "none";
+dealButton.style.display = "none";
 
 // The following function generates a random whole number between 2 - 11
 function getRandomCard() {
@@ -79,7 +89,7 @@ function giveMeYourMoney() {
         event.preventDefault();
         // Store player input as bet value
         player.bet = betInput.value;
-        player.bet = Number(player.bet);
+        player.bet = Number.parseFloat(player.bet).toFixed(2); 
         // Display bet info and hide the bookie
         chipsEl.textContent = `$${player.chips}`;
         betEl.textContent = `$${player.bet}`;
@@ -95,6 +105,8 @@ function dealTwoCards() {
     sum = Number(sum); 
     // Pushes the cards to the cards array
     cards.push(firstCard, secondCard); 
+    endButton.style.display = "inline-block"; 
+    dealButton.style.display = "inline-block";
 }
 
 // Clicking "Start Game" calls on startGame()
@@ -109,7 +121,6 @@ function startGame() {
         roundInProgress = true; 
         dealTwoCards();  
         luckyDrawCheck();
-        // Hide start button
         startButton.style.display = "none";
     }
 }
@@ -118,10 +129,14 @@ function startGame() {
 function luckyDrawCheck() {
     if (sum === 21) {
         player.chips = player.chips + player.bet * 2;
+        player.chips = Number.parseFloat(player.chips).toFixed(2); 
         message = "You got blackjack! You win double your bet for being so lucky.";
         roundLost = false;
         roundWon = true;
         roundInProgress = false; 
+        endButton.style.display = "none"; 
+        newButton.style.display = "inline-block"; 
+        dealButton.style.display = "none";
     } else {
         renderGame();
     }
@@ -132,6 +147,7 @@ function luckyDrawCheck() {
     sumEl.textContent = `${sum}`; 
 }
 
+// Renders the game logic
 function renderGame() {
     if (sum <= 20) {
         message = "Do you want to draw a new card?";
@@ -141,11 +157,15 @@ function renderGame() {
         roundLost = false; 
         roundWon = true;
         roundInProgress = false; 
+        endButton.style.display = "none"; 
+        newButton.style.display = "inline-block"; 
     } else {
         message = "You lose!";
         roundLost = true; 
         roundWon = false; 
         roundInProgress = false; 
+        endButton.style.display = "none"; 
+        newButton.style.display = "inline-block"; 
     }
     chipsManager(); 
     heyBigSpender();
@@ -159,13 +179,15 @@ function chipsManager() {
     if (roundWon == true && hasMoney == true && roundLost == false && roundInProgress == false) {
         // Full winnings for getting 21
         player.chips += player.bet; 
+        player.chips = Number.parseFloat(player.chips).toFixed(2); 
     } else if (roundWon == false && roundLost == true && roundInProgress == false) {
         // Deduct bet for losers
         player.chips -= player.bet;
+        player.chips = Number.parseFloat(player.chips).toFixed(2); 
     } else if (roundWon == false && hasMoney == true && roundLost == false && roundInProgress == false) {
         // Partial winnings for early enders, based on how close they got to 21
         player.chips = player.chips - player.bet + (player.bet * ( sum / 21 )); 
-        player.chips = Math.round(player.chips * 100) / 100;
+        player.chips = Number.parseFloat(player.chips).toFixed(2); 
     }
     chipsEl.textContent = `$${player.chips}`;
     betEl.textContent = `$${player.bet}`; 
@@ -187,7 +209,6 @@ function heyBigSpender() {
     betEl.textContent = `$${player.bet}`; 
 }
 
-// Clicking "Deal Cards" calls on newCard()
 document.querySelector("#newCard-btn").addEventListener("click", newCard); 
 function newCard() {
     if (bookie.style.display == "flex") {
@@ -228,6 +249,8 @@ function newRound() {
             roundLost = false;
             roundWon = false; 
             roundInProgress = true; 
+            newButton.style.display = "none";
+            dealButton.style.display = "inline-block";
             // Clear the cards array
             cards.splice(0); 
             sum = "";
@@ -263,6 +286,9 @@ function endRound() {
             roundLost = false;
             chipsManager(); 
             message = "You've won back a portion of your bet, based on how close you got to 21.";
+            endButton.style.display = "none";
+            dealButton.style.display = "none";
+            newButton.style.display = "inline-block"; 
         }
         messageEl.textContent = `${message}`;
         cardsEl.textContent = cards.join(" | ");
