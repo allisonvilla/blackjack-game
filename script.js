@@ -2,6 +2,8 @@
 
 // Fixes:
 // Optimize this spaghetti code
+// Fix the button spacing when elements are display:none
+// You don't get double your winnings if you win blackjack on a new round
 
 // ✔ DONE
 // (Done) Add new round function and button
