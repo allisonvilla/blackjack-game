@@ -234,6 +234,8 @@ a:focus {
     border-bottom: 2px solid #ebc95a;
 }
 
+/* Media Queries */
+
 @media (max-width: 515px) {
     html {
         font-size: 110%; 
