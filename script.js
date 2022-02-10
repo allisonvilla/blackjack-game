@@ -3,7 +3,6 @@
 // Fixes:
 // Optimize this spaghetti code
 // Fix the button spacing when elements are display:none
-// You don't get double your winnings if you win blackjack on a new round
 
 // ✔ DONE
 // (Done) Add new round function and button
@@ -26,6 +25,7 @@
 // (Fixed) Always round to two decimal places
 // (Fixed) Allow decimal bets
 // (Done) Only show necessary buttons
+// (Done) Removed the double winnings for natural draws since it only works on first round
 
 // Player object
 const player = {
@@ -130,9 +130,9 @@ function startGame() {
 // Used to check for a natural at the first deal
 function luckyDrawCheck() {
     if (sum === 21) {
-        player.chips = player.chips + player.bet * 2;
+        player.chips += player.bet;
         player.chips = Number(player.chips);
-        message = "You got blackjack! You win double your bet for being so lucky.";
+        message = "You got blackjack!";
         roundLost = false;
         roundWon = true;
         roundInProgress = false; 
