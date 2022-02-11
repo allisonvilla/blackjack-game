@@ -67,7 +67,7 @@ const betInput = document.querySelector("input");
 
 // Displays player funds information
 chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`; 
-betEl.textContent = `$${player.bet}`; 
+betEl.textContent = `$${Number.parseFloat(player.bet).toFixed(2)}`; 
 
 // Hides some elements until later
 resetButton.style.display = "none";
@@ -94,7 +94,7 @@ function giveMeYourMoney() {
         player.bet = Number(player.bet);
         // Display bet info and hide the bookie
         chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
-        betEl.textContent = `$${player.bet}`;
+        betEl.textContent = `$${Number.parseFloat(player.bet).toFixed(2)}`; 
         bookie.style.display = "none";
     })
 }
@@ -144,7 +144,7 @@ function luckyDrawCheck() {
     }
     messageEl.textContent = `${message}`; 
     chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
-    betEl.textContent = `$${player.bet}`; 
+    betEl.textContent = `$${Number.parseFloat(player.bet).toFixed(2)}`; 
     cardsEl.textContent = cards.join(" | ");
     sumEl.textContent = `${sum}`; 
 }
@@ -192,7 +192,7 @@ function chipsManager() {
         player.chips = Number(player.chips); 
     }
     chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
-    betEl.textContent = `$${player.bet}`; 
+    betEl.textContent = `$${Number.parseFloat(player.bet).toFixed(2)}`; 
 }
 
 // If the player runs out of chips, they perma-lose
@@ -208,7 +208,7 @@ function heyBigSpender() {
         resetButton.style.display = "inline-block";
     }
     chipsEl.textContent = `$${Number.parseFloat(player.chips).toFixed(2)}`;
-    betEl.textContent = `$${player.bet}`; 
+    betEl.textContent = `$${Number.parseFloat(player.bet).toFixed(2)}`; 
 }
 
 dealButton.addEventListener("click", newCard); 
